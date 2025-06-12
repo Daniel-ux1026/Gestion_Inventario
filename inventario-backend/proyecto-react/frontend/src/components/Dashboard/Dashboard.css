@@ -1,0 +1,26 @@
+.sidebar {
+  min-height: 100vh;
+}
+
+/* Encabezado solo en móviles */
+.mobile-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Sidebar responsivo */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .sidebar.show {
+    display: block;
+    position: absolute;
+    z-index: 999;
+    width: 80%;
+    height: 100vh;
+    background-color: #343a40;
+  }
+}
