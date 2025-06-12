@@ -1,5 +1,6 @@
 package com.inventario.service;
 
+import com.google.common.base.Preconditions;
 import com.inventario.dto.ProductoDTO;
 import com.inventario.entity.Producto;
 import com.inventario.repository.ProductoRepository;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.google.common.base.Preconditions; // Google guava
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +44,8 @@ public class ProductoService {
 
     @Transactional(readOnly = true)
     public List<ProductoDTO> buscarPorCategoria(Integer categoriaId) {
-        return productoRepository.findByCategoria(categoriaId)
+        // CORRECCIÓN: Esta llamada ahora coincide con el método definido en el repositorio.
+        return productoRepository.findByCategoria_IdCategoriaAndActivoTrue(categoriaId)
                 .stream()
                 .map(producto -> modelMapper.map(producto, ProductoDTO.class))
                 .collect(Collectors.toList());
@@ -60,7 +61,6 @@ public class ProductoService {
 
     @Transactional
     public ProductoDTO guardar(ProductoDTO productoDTO) {
-        // Usa Guava para validar que el DTO no sea nulo
         Preconditions.checkNotNull(productoDTO, "El DTO del producto no puede ser nulo");
         Preconditions.checkNotNull(productoDTO.getCodigoProducto(), "El código del producto no puede ser nulo.");
         if (productoDTO.getIdProducto() == null &&
@@ -69,8 +69,14 @@ public class ProductoService {
         }
 
         Producto producto = modelMapper.map(productoDTO, Producto.class);
-        producto = productoRepository.save(producto);
-        return modelMapper.map(producto, ProductoDTO.class);
+        producto.setActivo(true);
+        Producto productoGuardado = productoRepository.save(producto);
+
+        if (productoDTO.getIdProducto() == null && productoGuardado.getStockActual() > 0) {
+            kardexService.registrarEntrada(productoGuardado, productoGuardado.getStockActual(), "Stock Inicial");
+        }
+
+        return modelMapper.map(productoGuardado, ProductoDTO.class);
     }
 
     @Transactional
@@ -82,26 +88,17 @@ public class ProductoService {
     }
 
     @Transactional
-    public void actualizarStock(Integer productoId, Integer cantidad, String motivo, Integer usuarioId) {
+    public void actualizarStock(Integer productoId, int cantidad, String motivo) {
         Producto producto = productoRepository.findById(productoId)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        Integer stockAnterior = producto.getStockActual();
-        producto.setStockActual(stockAnterior + cantidad);
-        productoRepository.save(producto);
+        producto.setStockActual(producto.getStockActual() + cantidad);
+        Producto productoActualizado = productoRepository.save(producto);
 
-        // Registrar en kardex
-        kardexService.registrarMovimiento(
-                productoId,
-                cantidad > 0 ? "ENTRADA" : "SALIDA",
-                motivo,
-                Math.abs(cantidad),
-                stockAnterior,
-                producto.getStockActual(),
-                producto.getPrecioCompra(),
-                usuarioId,
-                null,
-                null
-        );
+        if (cantidad > 0) {
+            kardexService.registrarEntrada(productoActualizado, cantidad, motivo);
+        } else if (cantidad < 0) {
+            kardexService.registrarSalida(productoActualizado, Math.abs(cantidad), motivo);
+        }
     }
 }
