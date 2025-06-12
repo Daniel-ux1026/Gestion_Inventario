@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.google.common.base.Preconditions; // Google guava
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +60,9 @@ public class ProductoService {
 
     @Transactional
     public ProductoDTO guardar(ProductoDTO productoDTO) {
+        // Usa Guava para validar que el DTO no sea nulo
+        Preconditions.checkNotNull(productoDTO, "El DTO del producto no puede ser nulo");
+        Preconditions.checkNotNull(productoDTO.getCodigoProducto(), "El código del producto no puede ser nulo.");
         if (productoDTO.getIdProducto() == null &&
                 productoRepository.existsByCodigoProducto(productoDTO.getCodigoProducto())) {
             throw new RuntimeException("Ya existe un producto con ese código");

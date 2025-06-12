@@ -113,4 +113,12 @@ public class VentaService {
                 LocalDate.now().toString().replace("-", ""),
                 count + 1);
     }
+
+    @Transactional(readOnly = true)
+    public BigDecimal calcularTotalVentasPorCliente(Integer clienteId) {
+        return ventaRepository.findByCliente_IdUsuario(clienteId)
+                .stream()
+                .map(Venta::getTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

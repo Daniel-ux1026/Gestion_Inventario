@@ -7,6 +7,7 @@ import com.inventario.repository.ChatbotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils; // Importamos apache commons
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,10 @@ public class ChatbotService {
     private static final String WHATSAPP_NUMBER = "+51987654321";
 
     public ChatResponse procesarConsulta(ChatRequest request) {
+        //Valida con isNotBlank para cubrir null, vacios y espacios en blanco
+        if (StringUtils.isBlank(request.getMensaje())) {
+            return new ChatResponse("Por favor, ingresa una consulta.", "ERROR", false, null);
+        }
         String mensaje = request.getMensaje().toLowerCase().trim();
 
         // Buscar respuesta en la base de datos

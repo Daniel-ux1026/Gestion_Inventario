@@ -3,6 +3,7 @@ package com.inventario.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -65,17 +66,29 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
+                        // Endpoints Públicos
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/chatbot/**").permitAll()
-                        .requestMatchers("/productos/listar").permitAll()
-                        .requestMatchers("/productos/buscar/**").permitAll()
-                        .requestMatchers("/categorias/listar").permitAll()
-                        .requestMatchers("/marcas/listar").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // Endpoints para Clientes y roles superiores
+                        .requestMatchers(HttpMethod.GET, "/productos/listar", "/productos/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/categorias/listar", "/marcas/listar").permitAll()
+
+                        // Endpoints para Vendedores y Administradores
+                        .requestMatchers("/ventas/**").hasAnyRole("VENDEDOR", "ADMIN")
+
+                        // Endpoints exclusivos para Administradores
+                        .requestMatchers("/productos/**").hasRole("ADMIN") // POST, PUT, DELETE de productos
+                        .requestMatchers("/dashboard/**").hasRole("ADMIN")
+                        .requestMatchers("/kardex/**").hasRole("ADMIN")
+                        .requestMatchers("/usuarios/**").hasRole("ADMIN")
+
+                        // Cualquier otra petición requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(customUserDetailsService)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 }

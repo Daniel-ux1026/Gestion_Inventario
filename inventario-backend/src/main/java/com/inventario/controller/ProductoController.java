@@ -2,12 +2,19 @@ package com.inventario.controller;
 
 import com.inventario.dto.ApiResponse;
 import com.inventario.dto.ProductoDTO;
+import com.inventario.service.ExcelExportService; // Asegúrate de importar el servicio
 import com.inventario.service.ProductoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,6 +24,7 @@ import java.util.List;
 public class ProductoController {
 
     private final ProductoService productoService;
+    private final ExcelExportService excelService;
 
     @GetMapping("/listar")
     public ResponseEntity<ApiResponse<List<ProductoDTO>>> listarProductos() {
@@ -91,4 +99,29 @@ public class ProductoController {
                     .body(ApiResponse.error("Error al eliminar producto: " + e.getMessage()));
         }
     }
+
+    @GetMapping("/exportar/excel")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<InputStreamResource> exportarProductos() {
+        try {
+            List<ProductoDTO> productos = productoService.listarProductosActivos();
+
+            // CORRECCIÓN: Se cambió el nombre del método para que coincida con el del servicio.
+            ByteArrayInputStream in = excelService.exportarProductosExcel(productos);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attachment; filename=productos.xlsx");
+
+            return ResponseEntity
+                    .ok()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(new InputStreamResource(in));
+        } catch (IOException e) {
+            // Se recomienda registrar el error para futura depuración.
+            // log.error("Error al exportar productos a Excel", e);
+            return ResponseEntity.status(500).build();
+        }
+    }
 }
+

@@ -24,6 +24,6 @@ public class InventarioApplication {
         System.out.println("🌸 Iniciando Sistema de Inventario - El Lirio de los Valles 🌸");
         SpringApplication.run(InventarioApplication.class, args);
         System.out.println("✅ Sistema de Inventario iniciado correctamente");
-        System.out.println("📖 Documentación API: http://localhost:8080/");
+        System.out.println("📖 Link del servidor: http://localhost:8080/");
     }
 }
