@@ -6,7 +6,7 @@ Proyecto fullstack para la gestión integral de inventarios, que incorpora un ch
 
 ## Tecnologías Utilizadas
 
-- **Backend:** Java JDK 17 con JSP y Servidor Apache Tomcat  
+- **Backend:** Java JDK 17 con Spring Boot y Servidor Apache Tomcat  
 - **Frontend:** Vite x React con Bootstrap 5  
 - **Base de Datos:** MySQL  
 - **Comunicación:** API REST para conectar backend y frontend  
@@ -16,7 +16,7 @@ Proyecto fullstack para la gestión integral de inventarios, que incorpora un ch
 
 ## Descripción del Proyecto
 
-Esta aplicación permite gestionar productos en un inventario mediante operaciones CRUD (Crear, Leer, Actualizar, Eliminar). El backend está desarrollado en Java utilizando JSP para la generación dinámica de páginas y un API REST que expone los datos al frontend. React.js se encarga de la interfaz de usuario, consumiendo los datos mediante llamadas a la API y renderizando componentes con Bootstrap 5 para un diseño responsivo y moderno.
+Esta aplicación permite gestionar productos en un inventario mediante operaciones CRUD (Crear, Leer, Actualizar, Eliminar). El backend está desarrollado en Java utilizando Spring Boot y un API REST que expone los datos al frontend. React.js se encarga de la interfaz de usuario, consumiendo los datos mediante llamadas a la API y renderizando componentes con Bootstrap 5 para un diseño responsivo y moderno.
 
 El chatbot integrado facilita la interacción, ofreciendo ayuda en tiempo real para consultas sobre inventarios o uso del sistema, mejorando la eficiencia y experiencia del usuario.
 
