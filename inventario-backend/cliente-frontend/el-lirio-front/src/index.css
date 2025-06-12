@@ -1,0 +1,41 @@
+/* Reset básico y ajustes globales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+  line-height: 1.6;
+}
+
+/* Links */
+a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+a:hover {
+  color: #0a58ca;
+  text-decoration: underline;
+}
+
+/* Botones */
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Imágenes responsivas */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Contenedores principales */
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

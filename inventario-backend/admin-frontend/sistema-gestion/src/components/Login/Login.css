@@ -1,0 +1,84 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #a7a7b0;
+}
+
+.login-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 100%;
+  max-width: 350px;
+}
+
+.avatar {
+  width: 100px;
+  margin-bottom: 1.5rem;
+}
+
+/* Etiquetas de entrada */
+.input-group {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+}
+
+/* Caja del input con ícono */
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding: 0.4rem 0;
+  position: relative;
+}
+
+/* Input estilo limpio */
+.input-with-icon input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0.4rem 0;
+  font-size: 1rem;
+}
+
+/* Ícono alineado verticalmente */
+.input-with-icon span {
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+/* Placeholder con estilo */
+.input-with-icon input::placeholder {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Botón */
+.login-btn {
+  width: 100%;
+  padding: 0.6rem;
+  background-color: #4cc3ff;
+  color: black;
+  border: 1px solid #2c93c9;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+.login-btn:hover {
+  background-color: #2ca9e0;
+}
