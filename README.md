@@ -1,6 +1,6 @@
 # Gestión de Inventarios con Chatbot
 
-Proyecto fullstack para la gestión integral de inventarios, que incorpora un chatbot para mejorar la experiencia de usuario y soporte interactivo.
+Proyecto fullstack para la gestión integral de inventarios y la venta online de productos, que incorpora un chatbot para mejorar la experiencia de usuario y soporte interactivo.
 
 ---
 
