@@ -6,7 +6,7 @@ Proyecto fullstack para la gestión integral de inventarios y la venta online de
 
 ## Tecnologías Utilizadas
 
-- **Backend:** Java JDK 17 con Spring Boot y Servidor Apache Tomcat  
+- **Backend:** Java JDK 17 con Spring Boot 
 - **Frontend:** Vite x React con Bootstrap 5  
 - **Base de Datos:** MySQL  
 - **Comunicación:** API REST para conectar backend y frontend  
