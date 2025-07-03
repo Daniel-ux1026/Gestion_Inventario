@@ -29,7 +29,7 @@ public class ProductoDTO {
 
     private Integer stockActual;
     private Integer stockMinimo;
-    private String imagenUrl;
+    private String urlImagen;
     private Boolean activo;
     private LocalDateTime fechaCreacion;
 

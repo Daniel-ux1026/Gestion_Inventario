@@ -1,6 +1,6 @@
 package com.inventario.service;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.Preconditions; // GOOGLE GUAVA
 import com.inventario.dto.ProductoDTO;
 import com.inventario.entity.Producto;
 import com.inventario.repository.ProductoRepository;
@@ -61,6 +61,7 @@ public class ProductoService {
 
     @Transactional
     public ProductoDTO guardar(ProductoDTO productoDTO) {
+        // Uso Guava para validar que el DTO no sea nulo
         Preconditions.checkNotNull(productoDTO, "El DTO del producto no puede ser nulo");
         Preconditions.checkNotNull(productoDTO.getCodigoProducto(), "El código del producto no puede ser nulo.");
         if (productoDTO.getIdProducto() == null &&
@@ -101,4 +102,7 @@ public class ProductoService {
             kardexService.registrarSalida(productoActualizado, Math.abs(cantidad), motivo);
         }
     }
+
+    @Transactional
+    public void ObtenerCategoria(Integer id) {}
 }

@@ -1,3 +1,4 @@
+
 package com.inventario.controller;
 
 import com.inventario.dto.ApiResponse;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class DashboardController {
 
     private final DashboardService dashboardService;
-
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<DashboardDTO>> obtenerDatosDashboard() {
@@ -23,3 +23,4 @@ public class DashboardController {
         return ResponseEntity.ok(ApiResponse.success(dashboard));
     }
 }
+

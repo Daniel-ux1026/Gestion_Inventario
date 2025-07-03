@@ -29,4 +29,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     // Verifica si un producto existe por su código
     boolean existsByCodigoProducto(String codigoProducto);
+
+    long countByStockActualLessThan(Integer stock);
+
+    @Query("SELECT p FROM Producto p JOIN DetalleVenta dv ON p.idProducto = dv.producto.idProducto " +
+            "GROUP BY p.idProducto ORDER BY SUM(dv.cantidad) DESC")
+    List<Producto> findTop5ProductosMasVendidos();
 }

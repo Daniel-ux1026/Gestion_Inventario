@@ -38,7 +38,7 @@ public class Producto {
     private Integer stockMinimo = 0;
 
     @Column(name = "imagen_url", length = 500)
-    private String imagenUrl;
+    private String urlImagen;
 
     @Column(name = "activo")
     private Boolean activo = true;
@@ -49,15 +49,15 @@ public class Producto {
     @Column(name = "fecha_actualizacion")
     private LocalDateTime fechaActualizacion;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_marca", nullable = false)
     private Marca marca;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_proveedor")
     private Proveedor proveedor;
 

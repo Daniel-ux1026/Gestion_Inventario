@@ -1,7 +1,7 @@
 package com.inventario.service;
 
 import com.inventario.dto.ProductoDTO;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.*; // Usamos apache POI para exportar excel
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 

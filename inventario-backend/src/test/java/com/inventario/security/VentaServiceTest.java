@@ -1,17 +1,18 @@
-/*package com.inventario.security;
+package com.inventario.security;
 import com.inventario.entity.Usuario;
 import com.inventario.entity.Venta;
 import com.inventario.repository.VentaRepository;
 import com.inventario.service.VentaService;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Mock; // Prueba TDD con Mockito
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 class VentaServiceTest {
@@ -38,13 +39,13 @@ class VentaServiceTest {
         venta2.setCliente(cliente);
 
         // Simular el comportamiento del repositorio
-        when(ventaRepository.findByCliente_IdUsuario(clienteId)).thenReturn(List.of(venta1, venta2));
+        when(ventaRepository.findByClienteIdUsuario(clienteId)).thenReturn(List.of(venta1, venta2));
 
         // 2. Act (Actuar)
-        // Este método aún no existe, por lo que el código no compilará (ROJO)
+
         BigDecimal totalVentas = ventaService.calcularTotalVentasPorCliente(clienteId);
 
         // 3. Assert (Verificar)
         assertEquals(new BigDecimal("150.50"), totalVentas);
     }
-}*/
+}

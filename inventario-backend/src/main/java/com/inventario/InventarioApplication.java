@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *
  * @author El Lirio de los Valles
  * @version 1.0.0
- * @since 2024
+ * @since 2025
  */
 @SpringBootApplication
 @EnableJpaAuditing

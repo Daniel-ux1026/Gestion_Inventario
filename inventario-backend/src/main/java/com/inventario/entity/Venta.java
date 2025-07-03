@@ -18,6 +18,11 @@ public class Venta {
     @Column(name = "id_venta")
     private Integer idVenta;
 
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado", length = 20)
+    private EstadoVenta estado;
+
     @Column(name = "numero_venta", nullable = false, unique = true, length = 20)
     private String numeroVenta;
 
@@ -37,9 +42,6 @@ public class Venta {
     @Column(name = "metodo_pago", nullable = false)
     private MetodoPago metodoPago;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "estado")
-    private EstadoVenta estado = EstadoVenta.PENDIENTE;
 
     @Column(name = "observaciones", columnDefinition = "TEXT")
     private String observaciones;
