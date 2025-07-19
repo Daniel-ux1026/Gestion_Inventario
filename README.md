@@ -56,6 +56,7 @@ El frontend se ejecutará en http://localhost:3000.
 Consume la API REST del backend para mostrar y manejar los datos del inventario.
 
 4. Estructura del Proyecto:
+
 /backend:       Código Java con Spring boot, API REST, configuración y lógica del servidor.
 
 /frontend:      Código de Vite, componentes UI y lógica del cliente.
