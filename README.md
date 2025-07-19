@@ -59,4 +59,4 @@ Consume la API REST del backend para mostrar y manejar los datos del inventario.
 /backend       -> Código Java con Spring boot, API REST, configuración y lógica del servidor
 /frontend      -> Código de Vite, componentes UI y lógica del cliente
 /database     -> Scripts SQL para creación y carga de la base de datos (si aplica)
-/README.md     -> Documentación del proyecto
+
