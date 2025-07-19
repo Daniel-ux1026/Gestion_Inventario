@@ -8,18 +8,12 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const carritoObj = obtenerCarrito();
-        const carritoArray = Object.values(carritoObj || {});
-        const total = carritoArray.reduce((sum, p) => sum + (p?.cantidad || 0), 0);
-        setCantidad(total);
-
-        // Lee usuario del localStorage
+        // Obtén el total del carrito
+        const carrito = obtenerCarrito();
+        setCantidad(carrito.reduce((sum, p) => sum + (p.cantidad || 0), 0));
+        // Lee usuario
         const usuarioGuardado = localStorage.getItem("usuario");
-        if (usuarioGuardado) {
-            setUsuario(JSON.parse(usuarioGuardado));
-        } else {
-            setUsuario(null);
-        }
+        setUsuario(usuarioGuardado ? JSON.parse(usuarioGuardado) : null);
     }, []);
 
     const handleLogout = () => {
@@ -30,72 +24,82 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-danger px-3">
-            <div className="container-fluid">
-                {/* Botón hamburguesa */}
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarContent"
-                    aria-controls="navbarContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                {/* Logo / Home */}
-                <Link className="navbar-brand d-flex align-items-center" to="/">
-                    <i className="bi bi-house-door-fill fs-5 me-2"></i> El Lirio
-                </Link>
-                <div className="collapse navbar-collapse" id="navbarContent">
-                    <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                            <Link to="/ofertas" className="nav-link text-white">
-                                <i className="bi bi-tags-fill"></i> Ofertas
-                            </Link>
-                        </li>
-                        {/* Si está logueado muestra usuario, rol y cerrar sesión */}
-                        <li className="nav-item">
-                            {usuario ? (
-                                <div className="d-flex align-items-center">
-                                    <span className="nav-link text-white fw-bold">
-                                        <i className="bi bi-person-circle"></i>{" "}
-                                        {usuario.nombre || usuario.email || usuario.sub || "Cliente"}
-                                        <span className="badge bg-light text-dark ms-2">
-                                            {/* Rol - Accediendo específicamente a nombreRol */}
-                                            {usuario.rol?.nombreRol || usuario.role ||
-                                                (usuario.authorities && usuario.authorities[0]?.authority) || "CLIENTE"}
-                                        </span>
-                                    </span>
-                                    <button
-                                        className="btn btn-outline-light btn-sm ms-2"
-                                        onClick={handleLogout}
-                                    >
-                                        Cerrar sesión
-                                    </button>
-                                </div>
-                            ) : (
-                                <Link to="/login" className="nav-link">
-                                    <i className="bi bi-person-circle"></i> Iniciar / Crear cuenta
+        <header className="header-navbar">
+            <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: "linear-gradient(135deg,#dc3545,#c82333)", boxShadow: "0 2px 10px rgba(220,53,69,0.16)" }}>
+                <div className="container">
+                    {/* Logo */}
+                    <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
+                        <span className="logo-icon d-flex align-items-center justify-content-center">
+                            <i className="bi bi-flower1" style={{ fontSize: "1.8rem", color: "#dc3545", background: "#fff", borderRadius: "8px", padding: "5px" }}></i>
+                        </span>
+                        <div style={{ lineHeight: "1" }}>
+                            <span style={{ fontSize: "0.95rem", fontWeight: "bold", letterSpacing: ".5px" }}>EL LIRIO DE LOS VALLES S.A.C</span><br />
+                            <span style={{ fontSize: "0.8rem", opacity: "0.8" }}>LIRIO</span>
+                        </div>
+                    </Link>
+                    {/* Hamburger for mobile */}
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarContent"
+                        aria-controls="navbarContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    {/* Nav links */}
+                    <div className="collapse navbar-collapse" id="navbarContent">
+                        <ul className="navbar-nav ms-auto align-items-center gap-2">
+                            {/* Ofertas */}
+                            <li className="nav-item">
+                                <Link to="/ofertas" className="nav-link text-white d-flex align-items-center gap-1">
+                                    <i className="bi bi-tags-fill"></i> Ofertas
                                 </Link>
-                            )}
-                        </li>
-                        {/* Carrito */}
-                        <li className="nav-item">
-                            <Link to="/checkout" className="btn btn-light position-relative">
-                                <i className="bi bi-cart3 me-1"></i> Carrito
-                                {cantidad > 0 && (
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
-                                        {cantidad}
-                                    </span>
+                            </li>
+                            {/* Usuario/Rol */}
+                            <li className="nav-item">
+                                {usuario ? (
+                                    <div className="d-flex align-items-center">
+                                        <span className="nav-link text-white fw-bold d-flex align-items-center gap-1">
+                                            <i className="bi bi-person-circle"></i>
+                                            {usuario.nombre || usuario.email || usuario.sub || "Cliente"}
+                                            {usuario.rol?.nombreRol && (
+                                                <span className="badge bg-light text-dark ms-2" style={{ fontSize: "0.75rem" }}>
+                                                    {usuario.rol?.nombreRol?.toUpperCase()}
+                                                </span>
+                                            )}
+                                        </span>
+                                        <button
+                                            className="btn btn-outline-light btn-sm ms-2"
+                                            onClick={handleLogout}
+                                        >
+                                            Cerrar sesión
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <Link to="/login" className="nav-link text-white">
+                                        <i className="bi bi-person-circle"></i> Iniciar / Crear cuenta
+                                    </Link>
                                 )}
-                            </Link>
-                        </li>
-                    </ul>
+                            </li>
+                            {/* Carrito */}
+                            <li className="nav-item">
+                                <Link to="/checkout" className="btn btn-light position-relative ms-1" style={{ fontWeight: 500 }}>
+                                    <i className="bi bi-cart3 me-1"></i> Carrito
+                                    {cantidad > 0 && (
+                                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+                                            {cantidad}
+                                        </span>
+                                    )}
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </header>
     );
 };
 

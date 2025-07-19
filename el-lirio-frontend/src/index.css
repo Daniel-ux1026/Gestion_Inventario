@@ -1,41 +1,454 @@
-/* Reset básico y ajustes globales */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
-  font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
   background-color: #f8f9fa;
-  color: #212529;
-  line-height: 1.6;
+  color: #333;
 }
 
-/* Links */
-a {
-  color: #0d6efd;
-  text-decoration: none;
+/* Sidebar Styles */
+.sidebar {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  height: fit-content;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 20px;
 }
-a:hover {
-  color: #0a58ca;
-  text-decoration: underline;
+/* Header Styles */
+.header {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  padding: 12px 0;
+  box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
 }
 
-/* Botones */
-button {
-  font-family: inherit;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.search-container {
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 40px 10px 15px;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.search-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  padding: 5px 10px;
+}
+
+.header-icons {
+  display: flex;
+  gap: 20px;
+}
+
+.header-icon {
+  color: white;
+  font-size: 1.4rem;
+  transition: transform 0.2s;
   cursor: pointer;
 }
 
-/* Imágenes responsivas */
-img {
-  max-width: 100%;
-  height: auto;
+.header-icon:hover {
+  transform: scale(1.1);
 }
 
-/* Contenedores principales */
-.container {
-  padding-left: 1rem;
-  padding-right: 1rem;
+
+
+.sidebar h5 {
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  border-bottom: 2px solid #dc3545;
+  padding-bottom: 10px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.category-item:hover {
+  background-color: #f8f9fa;
+}
+
+.category-item input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.1);
+  accent-color: #dc3545;
+}
+
+.price-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.price-input {
+  width: 60px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Product Grid */
+.products-container {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 25px;
+}
+
+.product-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-info {
+  padding: 20px;
+}
+
+.product-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.product-description {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.product-price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #28a745;
+  margin-bottom: 15px;
+}
+
+.add-btn {
+  width: 100%;
+  background: #343a40;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.add-btn:hover {
+  background: #23272b;
+  transform: translateY(-2px);
+}
+
+/* Footer */
+.footer {
+  background: #2c3e50;
+  color: white;
+  padding: 40px 0 20px;
+  margin-top: 50px;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.footer-section h6 {
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #ecf0f1;
+}
+
+.footer-section p, .footer-section a {
+  color: #bdc3c7;
+  text-decoration: none;
+  line-height: 1.6;
+}
+
+.footer-section a:hover {
+  color: #ecf0f1;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  background: #34495e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.social-icon:hover {
+  background: #dc3545;
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  border-top: 1px solid #34495e;
+  padding-top: 20px;
+  text-align: center;
+  color: #95a5a6;
+  font-size: 0.9rem;
+}
+
+/* WhatsApp Button */
+.whatsapp-float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 30px;
+  right: 30px;
+  background: #25d366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  z-index: 999;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.whatsapp-float:hover {
+  background: #128c7e;
+  transform: scale(1.1);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .search-container {
+    order: 1;
+    max-width: 100%;
+  }
+
+  .logo {
+    order: 2;
+    justify-content: center;
+  }
+
+  .header-icons {
+    order: 3;
+    justify-content: center;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .sidebar {
+    margin-bottom: 20px;
+  }
+}
+
+/* Loading Animation */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #dc3545;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.footer {
+  background: #23272b !important;
+  color: #fff !important;
+  font-size: 0.95rem;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.footer-section h6 {
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+  color: #ecf0f1;
+}
+
+.footer-section p, .footer-section a {
+  color: #bdc3c7;
+  text-decoration: none;
+  line-height: 1.5;
+}
+
+.footer-section a:hover {
+  color: #fff;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.social-icon {
+  width: 36px;
+  height: 36px;
+  background: #34495e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.3rem;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.social-icon:hover {
+  background: #dc3545;
+  transform: translateY(-3px) scale(1.1);
+  color: #fff;
+}
+
+.footer-bottom {
+  border-top: 1px solid #34495e;
+  padding-top: 18px;
+  color: #95a5a6;
+  font-size: 0.9rem;
+  margin-top: 12px;
+}
+
+@media (max-width: 991px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .footer-section {
+    margin-bottom: 12px;
+  }
+}
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: #dc3545;
+}
+@media (max-width: 991px) {
+  .navbar-brand span,
+  .navbar-brand div {
+    font-size: 0.85rem !important;
+  }
 }
