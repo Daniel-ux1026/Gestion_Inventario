@@ -12,8 +12,7 @@ import Register from "./pages/auth/register.jsx";
 import DetalleOferta from "./pages/cliente/DetalleOferta.jsx";
 import Recuperar from "./pages/auth/Recuperar.jsx";
 import ResetPassword from "./pages/auth/ResetPassword.jsx";
-import HistorialPedidos from "./pages/cliente/HistorialPedidos.jsx";
-
+import MisPedidos from "./pages/cliente/MisPedidos.jsx";
 // COMPONENTES ADMIN
 import Dashboard from "./pages/admin/Dashboard/Dashboard.jsx";
 import ValidarPagos from "./pages/admin/ValidarPagos.jsx";
@@ -35,14 +34,14 @@ export default function App() {
                 <Route path="/" element={<ClienteLayout />}>
                     <Route index element={<Home />} />
                     <Route path="producto/:id" element={<DetalleProducto />} />
+                    <Route path="/detalle-oferta/:id" element={<DetalleOferta />} />
                     <Route path="checkout" element={<Checkout />} />
                     <Route path="ofertas" element={<Ofertas />} />
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />
-                    <Route path="mis-pedidos" element={<HistorialPedidos />} />
-                    <Route path="detalle-oferta/:id" element={<DetalleOferta />} />
                     <Route path="recuperar" element={<Recuperar />} />
                     <Route path="reset-password" element={<ResetPassword />} />
+                    <Route path="/mis-pedidos" element={<MisPedidos />} />
                 </Route>
 
                 {/* ADMIN */}

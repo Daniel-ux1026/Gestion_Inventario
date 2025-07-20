@@ -1,117 +1,173 @@
+// src/pages/cliente/Ofertas.jsx
 import React from "react";
-import { Carousel } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-// Banners (asegúrate que existan estos archivos en tu estructura)
-import banner1 from "../../assets/img/banner/banner1.jpg";
-import banner2 from "../../assets/img/banner/banner2.jpg";
-import banner3 from "../../assets/img/banner/banner3.jpg";
-import banner4 from "../../assets/img/banner/banner4.jpg";
-import banner5 from "../../assets/img/banner/banner5.jpg";
-
-// Productos (asegúrate de tener estas imágenes)
-import arroz from "../../../../uploads/productos/arroz.jpg";
-import aceite from "../../../../uploads/productos/aceite.jpg";
-import atun from "../../../../uploads/productos/atun-campomar.jpg";
-import cafe from "../../../../uploads/productos/cafe_altomayo.jpg";
-import fideo from "../../../../uploads/productos/fideos.jpg";
-
-const banners = [
-    { id: 1, src: banner1, alt: "Oferta 1" },
-    { id: 2, src: banner2, alt: "Oferta 2" },
-    { id: 3, src: banner3, alt: "Oferta 3" },
-    { id: 4, src: banner4, alt: "Oferta 4" },
-    { id: 5, src: banner5, alt: "Oferta 5" },
-];
-
+// Array de productos de oferta (puedes agregar/quitar los que quieras)
 const productosOferta = [
     {
-        id: 1,
-        nombre: "Arroz Extra Costeño",
-        precio: 10.5,
-        precioOferta: 7.99,
-        imagen: arroz,
+        idProducto: 3,
+        nombreProducto: "Aceite Olivar",
+        descripcion: "Aceite Olivar de oliva",
+        precioVenta: 3.40,
+        precioOferta: 2.72,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/aceite-olivar.jpg",
     },
     {
-        id: 2,
-        nombre: "Aceite Primor",
-        precio: 9.5,
-        precioOferta: 6.99,
-        imagen: aceite,
+        idProducto: 7,
+        nombreProducto: "Arroz Costeño",
+        descripcion: "Arroz costeño",
+        precioVenta: 2.10,
+        precioOferta: 1.68,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/arroz-costeno.jpg",
     },
     {
-        id: 3,
-        nombre: "Atún Campomar",
-        precio: 7.0,
-        precioOferta: 5.20,
-        imagen: atun,
+        idProducto: 10,
+        nombreProducto: "Arroz Faraón",
+        descripcion: "Arroz Faraón de calidad",
+        precioVenta: 2.30,
+        precioOferta: 1.84,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/arroz_faraon.jpg",
     },
     {
-        id: 4,
-        nombre: "Café Altomayo",
-        precio: 15.5,
-        precioOferta: 11.50,
-        imagen: cafe,
+        idProducto: 25,
+        nombreProducto: "Opal",
+        descripcion: "Jabón Opal",
+        precioVenta: 2.00,
+        precioOferta: 1.60,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/opal.jpg",
     },
     {
-        id: 5,
-        nombre: "Fideos Don Vittorio",
-        precio: 6.2,
-        precioOferta: 4.80,
-        imagen: fideo,
+        idProducto: 26,
+        nombreProducto: "Patrona",
+        descripcion: "Jabón Patrona",
+        precioVenta: 2.00,
+        precioOferta: 1.60,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/patrona.jpg",
     },
+    {
+        idProducto: 12,
+        nombreProducto: "Atún Campomar",
+        descripcion: "Atún Campomar enlatado",
+        precioVenta: 2.10,
+        precioOferta: 1.68,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/atun-campomar.jpg",
+    }
 ];
 
-const Ofertas = () => (
-    <div className="container my-4">
-        {/* Banner/Carrusel */}
-        <Carousel>
-            {banners.map((banner) => (
-                <Carousel.Item key={banner.id}>
-                    <img
-                        className="d-block w-100"
-                        src={banner.src}
-                        alt={banner.alt}
-                        style={{ maxHeight: 300, objectFit: "cover" }}
-                    />
-                </Carousel.Item>
-            ))}
-        </Carousel>
+// Función para agregar producto al carrito
+const agregarAlCarrito = (producto) => {
+    try {
+        const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+        const existente = carrito.find(item => item.id === producto.idProducto);
 
-        {/* Productos en oferta */}
-        <h4 className="mt-4 mb-3">Productos en Oferta</h4>
-        <div className="row">
-            {productosOferta.length === 0 ? (
-                <div className="col-12">
-                    <p className="text-center">No hay ofertas disponibles en este momento.</p>
-                </div>
-            ) : (
-                productosOferta.map((prod) => (
-                    <div className="col-md-3 mb-4" key={prod.id}>
-                        <div className="card h-100">
-                            <img
-                                src={prod.imagen}
-                                className="card-img-top"
-                                alt={prod.nombre}
-                                style={{ maxHeight: 290, objectFit: "cover" }}
-                            />
-                            <div className="card-body">
-                                <h6 className="card-title">{prod.nombre}</h6>
-                                <p className="mb-1 text-decoration-line-through text-secondary">
-                                    S/. {prod.precio.toFixed(2)}
+        if (existente) {
+            existente.cantidad += 1;
+            Swal.fire({
+                icon: "success",
+                title: "Cantidad actualizada",
+                text: `${producto.nombreProducto} - Cantidad: ${existente.cantidad}`,
+                timer: 1200,
+                showConfirmButton: false
+            });
+        } else {
+            carrito.push({
+                id: producto.idProducto,
+                nombre: producto.nombreProducto,
+                precio: producto.precioOferta,
+                imagen: producto.imagenUrl,
+                cantidad: 1
+            });
+            Swal.fire({
+                icon: "success",
+                title: "¡Agregado!",
+                text: `${producto.nombreProducto} se agregó al carrito`,
+                timer: 1200,
+                showConfirmButton: false
+            });
+        }
+
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        window.dispatchEvent(new Event("carritoActualizado"));
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudo agregar al carrito"
+        });
+    }
+};
+
+const Ofertas = () => {
+    const navigate = useNavigate();
+
+    return (
+        <div className="container my-4">
+            <h3 className="mb-4 text-primary">
+                <i className="fas fa-fire text-danger me-2"></i>
+                Productos en Oferta
+            </h3>
+            <div className="row">
+                {productosOferta.map(producto => (
+                    <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4" key={producto.idProducto}>
+                        <div className="card h-100 shadow-sm border-0 hover-card">
+                            <div
+                                className="card-img-container text-center"
+                                style={{ padding: "1rem", cursor: "pointer" }}
+                                onClick={() => navigate(`/detalle-oferta/${producto.idProducto}`)}
+                            >
+                                <img
+                                    src={`http://localhost:8080${producto.imagenUrl}`}
+                                    alt={producto.nombreProducto}
+                                    className="card-img-top"
+                                    style={{ height: 140, objectFit: "contain", maxWidth: "100%" }}
+                                    onError={(e) => { e.target.src = "/uploads/productos/default.jpg"; }}
+                                />
+                            </div>
+                            <div className="card-body d-flex flex-column">
+                                <h6
+                                    className="card-title text-truncate"
+                                    title={producto.nombreProducto}
+                                    style={{ cursor: "pointer", color: "#0d6efd" }}
+                                    onClick={() => navigate(`/detalle-oferta/${producto.idProducto}`)}
+                                >
+                                    {producto.nombreProducto}
+                                </h6>
+                                <p className="small text-muted mb-2 text-truncate">
+                                    {producto.descripcion}
                                 </p>
-                                <p className="fw-bold text-success">
-                                    S/. {prod.precioOferta.toFixed(2)}
-                                </p>
-                                <button className="btn btn-primary w-100">
-                                    Agregar al carrito
+                                <div className="mb-2">
+                                    <span className="text-decoration-line-through text-secondary small">
+                                        Antes: S/. {producto.precioVenta.toFixed(2)}
+                                    </span>
+                                    <span className="fw-bold text-success fs-5 ms-2">
+                                        S/. {producto.precioOferta.toFixed(2)}
+                                    </span>
+                                </div>
+                                <button
+                                    className="btn btn-primary w-100"
+                                    disabled={producto.stockActual === 0}
+                                    onClick={() => agregarAlCarrito(producto)}
+                                >
+                                    <i className="fas fa-cart-plus me-1"></i>
+                                    {producto.stockActual === 0 ? "Sin stock" : "Agregar al carrito"}
                                 </button>
+                                <small className="text-muted mt-2 d-block">
+                                    Stock: {producto.stockActual ?? 0} unidades
+                                </small>
                             </div>
                         </div>
                     </div>
-                ))
-            )}
+                ))}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default Ofertas;

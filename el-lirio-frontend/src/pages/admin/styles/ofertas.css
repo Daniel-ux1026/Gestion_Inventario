@@ -1,0 +1,84 @@
+/* Efectos hover para las tarjetas */
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.hover-btn {
+    transition: all 0.3s ease;
+}
+
+.hover-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Animación pulse para badges */
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Efecto hover para imágenes */
+.card-img-container:hover img {
+    transform: scale(1.05);
+}
+
+.card-img-container {
+    overflow: hidden;
+}
+
+/* Loading spinner personalizado */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+.oferta-card {
+    transition: box-shadow 0.3s, transform 0.2s;
+    border-radius: 1rem;
+}
+.oferta-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.09), 0 1.5px 5px #1976d240;
+    transform: translateY(-2px) scale(1.025);
+}
+
+.card-img-container {
+    background: #f8f8f8;
+    border-radius: 1rem 1rem 0 0;
+    padding: 8px 8px 0 8px;
+    min-height: 185px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.oferta-caption {
+    background: rgba(33, 37, 41, 0.77);
+    padding: 15px 25px;
+    border-radius: 16px;
+    color: #fff;
+    text-shadow: 0 2px 8px #111a;
+    display: inline-block;
+}
+.pulse {
+    animation: pulse 1.2s infinite alternate;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255,42,42,.35);}
+    100% { box-shadow: 0 0 0 12px rgba(255,42,42,0); }
+}

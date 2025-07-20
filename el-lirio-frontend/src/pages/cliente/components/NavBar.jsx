@@ -8,23 +8,30 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Función para actualizar cantidad del carrito
+        // Actualiza cantidad del carrito
         const actualizarCantidad = () => {
             const carrito = obtenerCarrito();
             setCantidad(carrito.reduce((sum, p) => sum + (p.cantidad || 0), 0));
         };
 
-        // Escuchar cambios en el carrito (evento global)
+        // Actualiza usuario logueado
+        const actualizarUsuario = () => {
+            const usuarioGuardado = localStorage.getItem("usuario");
+            setUsuario(usuarioGuardado ? JSON.parse(usuarioGuardado) : null);
+        };
+
         window.addEventListener("carritoActualizado", actualizarCantidad);
+        window.addEventListener("usuarioActualizado", actualizarUsuario);
+
         // Carga inicial
         actualizarCantidad();
+        actualizarUsuario();
 
-        // Leer usuario al cargar
-        const usuarioGuardado = localStorage.getItem("usuario");
-        setUsuario(usuarioGuardado ? JSON.parse(usuarioGuardado) : null);
-
-        // Cleanup listener al desmontar
-        return () => window.removeEventListener("carritoActualizado", actualizarCantidad);
+        // Limpieza
+        return () => {
+            window.removeEventListener("carritoActualizado", actualizarCantidad);
+            window.removeEventListener("usuarioActualizado", actualizarUsuario);
+        };
     }, []);
 
     const handleLogout = () => {
@@ -32,19 +39,36 @@ const Navbar = () => {
         localStorage.removeItem("usuario");
         setUsuario(null);
         navigate("/login");
+        // Lanza evento por si hay otros componentes que usan usuario
+        window.dispatchEvent(new Event("usuarioActualizado"));
     };
 
     return (
         <header className="header-navbar">
-            <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: "linear-gradient(135deg,#dc3545,#c82333)", boxShadow: "0 2px 10px rgba(220,53,69,0.16)" }}>
+            <nav className="navbar navbar-expand-lg navbar-dark"
+                 style={{
+                     background: "linear-gradient(135deg,#dc3545,#c82333)",
+                     boxShadow: "0 2px 10px rgba(220,53,69,0.16)"
+                 }}>
                 <div className="container">
                     {/* Logo */}
                     <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
                         <span className="logo-icon d-flex align-items-center justify-content-center">
-                            <i className="bi bi-flower1" style={{ fontSize: "1.8rem", color: "#dc3545", background: "#fff", borderRadius: "8px", padding: "5px" }}></i>
+                            <i className="bi bi-flower1"
+                               style={{
+                                   fontSize: "1.8rem",
+                                   color: "#dc3545",
+                                   background: "#fff",
+                                   borderRadius: "8px",
+                                   padding: "5px"
+                               }}></i>
                         </span>
                         <div style={{ lineHeight: "1" }}>
-                            <span style={{ fontSize: "0.95rem", fontWeight: "bold", letterSpacing: ".5px" }}>EL LIRIO DE LOS VALLES S.A.C</span><br />
+                            <span style={{
+                                fontSize: "0.95rem",
+                                fontWeight: "bold",
+                                letterSpacing: ".5px"
+                            }}>EL LIRIO DE LOS VALLES S.A.C</span><br />
                             <span style={{ fontSize: "0.8rem", opacity: "0.8" }}>LIRIO</span>
                         </div>
                     </Link>
@@ -69,6 +93,14 @@ const Navbar = () => {
                                     <i className="bi bi-tags-fill"></i> Ofertas
                                 </Link>
                             </li>
+                            {/* "Mis Pedidos" SOLO si está logueado */}
+                            {usuario && (
+                                <li className="nav-item">
+                                    <Link to="/mis-pedidos" className="btn btn-outline-light ms-2">
+                                        <i className="bi bi-box-seam"></i> Mis Pedidos
+                                    </Link>
+                                </li>
+                            )}
                             {/* Usuario/Rol */}
                             <li className="nav-item">
                                 {usuario ? (

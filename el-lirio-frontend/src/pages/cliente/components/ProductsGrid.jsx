@@ -1,8 +1,13 @@
 import React from "react";
-import { agregarAlCarrito } from "../utils/carrito"; // ajusta la ruta si es necesario
+import { useNavigate } from "react-router-dom";
+import { agregarAlCarrito } from "../utils/carrito";
 
 const ProductsGrid = ({ products }) => {
-    const handleAddToCart = (product) => {
+    const navigate = useNavigate();
+
+    // Agregar al carrito
+    const handleAddToCart = (event, product) => {
+        event.stopPropagation(); // Para que no se dispare el click de la card
         agregarAlCarrito({
             id: product.idProducto,
             nombre: product.nombreProducto,
@@ -15,12 +20,18 @@ const ProductsGrid = ({ products }) => {
     return (
         <div className="product-grid">
             {products.map(product => (
-                <div className="product-card" key={product.idProducto}>
+                <div
+                    className="product-card"
+                    key={product.idProducto}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate(`/producto/${product.idProducto}`)}
+                >
                     <div className="product-image">
                         <img
                             src={`http://localhost:8080${product.urlImagen}`}
                             alt={product.nombreProducto}
                             style={{ width: "100%", height: "200px", objectFit: "contain" }}
+                            onError={e => { e.target.src = "/uploads/productos/default.jpg"; }}
                         />
                     </div>
                     <div className="product-info">
@@ -31,7 +42,7 @@ const ProductsGrid = ({ products }) => {
                         </div>
                         <button
                             className="add-btn btn btn-dark w-100 mt-2"
-                            onClick={() => handleAddToCart(product)}
+                            onClick={e => handleAddToCart(e, product)}
                             disabled={product.stockActual === 0}
                         >
                             {product.stockActual === 0 ? "Sin stock" : "Añadir"}

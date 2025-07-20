@@ -1,118 +1,165 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { agregarAlCarrito } from "./utils/carrito";
+// src/pages/cliente/DetalleOferta.jsx
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
+// ¡Mismo array de productos oferta!
+const productosOferta = [
+    {
+        idProducto: 3,
+        nombreProducto: "Aceite Olivar",
+        descripcion: "Aceite Olivar de oliva",
+        precioVenta: 3.40,
+        precioOferta: 2.72,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/aceite-olivar.jpg",
+    },
+    {
+        idProducto: 7,
+        nombreProducto: "Arroz Costeño",
+        descripcion: "Arroz costeño",
+        precioVenta: 2.10,
+        precioOferta: 1.68,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/arroz-costeno.jpg",
+    },
+    {
+        idProducto: 10,
+        nombreProducto: "Arroz Faraón",
+        descripcion: "Arroz Faraón de calidad",
+        precioVenta: 2.30,
+        precioOferta: 1.84,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/arroz_faraon.jpg",
+    },
+    {
+        idProducto: 25,
+        nombreProducto: "Opal",
+        descripcion: "Jabón Opal",
+        precioVenta: 2.00,
+        precioOferta: 1.60,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/opal.jpg",
+    },
+    {
+        idProducto: 26,
+        nombreProducto: "Patrona",
+        descripcion: "Jabón Patrona",
+        precioVenta: 2.00,
+        precioOferta: 1.60,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/patrona.jpg",
+    },
+    {
+        idProducto: 12,
+        nombreProducto: "Atún Campomar",
+        descripcion: "Atún Campomar enlatado",
+        precioVenta: 2.10,
+        precioOferta: 1.68,
+        stockActual: 50,
+        imagenUrl: "/uploads/productos/atun-campomar.jpg",
+    }
+];
+
+// Agregar al carrito (misma lógica que en Ofertas.jsx)
+const agregarAlCarrito = (producto) => {
+    try {
+        const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+        const existente = carrito.find(item => item.id === producto.idProducto);
+
+        if (existente) {
+            existente.cantidad += 1;
+            Swal.fire({
+                icon: "success",
+                title: "Cantidad actualizada",
+                text: `${producto.nombreProducto} - Cantidad: ${existente.cantidad}`,
+                timer: 1200,
+                showConfirmButton: false
+            });
+        } else {
+            carrito.push({
+                id: producto.idProducto,
+                nombre: producto.nombreProducto,
+                precio: producto.precioOferta,
+                imagen: producto.imagenUrl,
+                cantidad: 1
+            });
+            Swal.fire({
+                icon: "success",
+                title: "¡Agregado!",
+                text: `${producto.nombreProducto} se agregó al carrito`,
+                timer: 1200,
+                showConfirmButton: false
+            });
+        }
+
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        window.dispatchEvent(new Event("carritoActualizado"));
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudo agregar al carrito"
+        });
+    }
+};
 
 const DetalleOferta = () => {
     const { id } = useParams();
-    const [producto, setProducto] = useState(null);
-    const [relacionados, setRelacionados] = useState([]);
-    const [cantidad, setCantidad] = useState(1);
-    const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState("");
+    const navigate = useNavigate();
+    const producto = productosOferta.find(p => p.idProducto === Number(id));
 
-    // Obtener producto desde el backend
-    useEffect(() => {
-        const fetchProducto = async () => {
-            setCargando(true);
-            setError("");
-            try {
-                // Cambia la URL por la de tu backend
-                const { data } = await axios.get(`http://localhost:8080/api/productos/oferta/${id}`);
-                setProducto(data);
-
-                // Buscar productos relacionados en la misma categoría, pero diferente id
-                const { data: relacionadosData } = await axios.get(
-                    `http://localhost:8080/api/productos/oferta?categoria=${data.categoria}&exclude=${data.id}&limit=3`
-                );
-                setRelacionados(relacionadosData);
-            } catch (e) {
-                setError("Producto no encontrado.");
-                setProducto(null);
-                setRelacionados([]);
-            } finally {
-                setCargando(false);
-            }
-        };
-        fetchProducto();
-    }, [id]);
-
-    if (cargando) return <h4 className="text-center mt-5">Cargando...</h4>;
-    if (error || !producto) return <h4 className="text-center mt-5">{error || "Producto no encontrado."}</h4>;
-
-    const handleAgregar = () => {
-        for (let i = 0; i < cantidad; i++) {
-            agregarAlCarrito(producto);
-        }
-        alert(`✅ Se agregó ${producto.nombre}`);
-    };
+    if (!producto) {
+        return (
+            <div className="container py-5">
+                <div className="alert alert-danger text-center">
+                    Producto no encontrado. <button className="btn btn-link" onClick={() => navigate("/ofertas")}>Volver a Ofertas</button>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="container py-4">
-            <div className="row align-items-start">
-                <div className="col-md-5 text-center mb-3">
+        <div className="container py-5">
+            <div className="row align-items-center">
+                <div className="col-md-5 text-center mb-4">
                     <img
-                        src={producto.imagen}
-                        alt={producto.nombre}
-                        className="img-fluid"
-                        style={{ maxHeight: "300px", objectFit: "contain" }}
+                        src={`http://localhost:8080${producto.imagenUrl}`}
+                        alt={producto.nombreProducto}
+                        className="img-fluid rounded shadow"
+                        style={{ maxHeight: "350px", objectFit: "contain" }}
+                        onError={e => { e.target.src = "/uploads/productos/default.jpg"; }}
                     />
                 </div>
                 <div className="col-md-7">
-                    <h3>{producto.nombre}</h3>
-                    <p className="text-muted text-decoration-line-through">
-                        S/ {producto.precioOriginal.toFixed(2)}
+                    <h2>{producto.nombreProducto}</h2>
+                    <p className="text-muted">{producto.descripcion}</p>
+                    <p>
+                        <span className="text-decoration-line-through text-secondary">
+                            S/ {producto.precioVenta.toFixed(2)}
+                        </span>
+                        <span className="fw-bold text-success fs-4 ms-3">
+                            S/ {producto.precioOferta.toFixed(2)}
+                        </span>
                     </p>
-                    <p className="text-success fs-4">S/ {producto.precioOferta.toFixed(2)}</p>
-
-                    <div className="mb-3">
-                        <label htmlFor="cantidad" className="form-label">Cantidad</label>
-                        <input
-                            type="number"
-                            id="cantidad"
-                            className="form-control"
-                            value={cantidad}
-                            onChange={(e) => setCantidad(Math.max(1, Math.min(3, Number(e.target.value))))}
-                            min={1}
-                            max={3}
-                        />
-                    </div>
-
-                    <button className="btn btn-dark w-100" onClick={handleAgregar}>
-                        <i className="bi bi-cart-plus"></i> Añadir al carrito
+                    <p>
+                        <span className="badge bg-danger fs-6">-20%</span>
+                        <span className="ms-3">Stock: {producto.stockActual}</span>
+                    </p>
+                    <button
+                        className="btn btn-primary btn-lg w-100 mt-3"
+                        onClick={() => agregarAlCarrito(producto)}
+                        disabled={producto.stockActual === 0}
+                    >
+                        <i className="fas fa-cart-plus me-2"></i>
+                        {producto.stockActual === 0 ? "Sin stock" : "Agregar al carrito"}
                     </button>
-                </div>
-            </div>
-
-            {/* Productos relacionados */}
-            <div className="mt-5">
-                <h5>Productos relacionados</h5>
-                <div className="row g-3">
-                    {relacionados.length === 0 && (
-                        <p className="text-muted">No hay productos relacionados.</p>
-                    )}
-                    {relacionados.map((rel) => (
-                        <div className="col-sm-6 col-md-4" key={rel.id}>
-                            <div className="card h-100">
-                                <img
-                                    src={rel.imagen}
-                                    className="card-img-top"
-                                    style={{ height: "150px", objectFit: "contain" }}
-                                    alt={rel.nombre}
-                                />
-                                <div className="card-body">
-                                    <h6>{rel.nombre}</h6>
-                                    <p className="text-success fw-bold">S/ {rel.precioOferta.toFixed(2)}</p>
-                                    <button
-                                        className="btn btn-outline-primary w-100"
-                                        onClick={() => window.location.href = `/detalle-oferta/${rel.id}`}
-                                    >
-                                        Ver más
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                    <button
+                        className="btn btn-link mt-2"
+                        onClick={() => navigate("/ofertas")}
+                    >
+                        ← Volver a Ofertas
+                    </button>
                 </div>
             </div>
         </div>

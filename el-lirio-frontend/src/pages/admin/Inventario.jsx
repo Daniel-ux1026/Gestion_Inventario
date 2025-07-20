@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-// import tu css si lo necesitas
+
 
 const Inventario = () => {
   const [productos, setProductos] = useState([

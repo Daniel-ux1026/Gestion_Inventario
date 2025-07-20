@@ -1,6 +1,6 @@
 import Navbar from "../pages/cliente/components/Navbar.jsx";
 import Footer from "../pages/cliente/components/Footer.jsx";
-import { Outlet } from "react-router-dom"; // <-- IMPORTANTE
+import { Outlet } from "react-router-dom";
 
 export default function ClienteLayout() {
     return (
