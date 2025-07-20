@@ -1,32 +1,49 @@
-const ProductsGrid = ({ products, onAddToCart }) => {
-    if (products.length === 0) {
-        return (
-            <div className="text-center py-5">
-                <i className="bi bi-search" style={{ fontSize: "3rem", color: "#6c757d" }}></i>
-                <h5 className="mt-3">No se encontraron productos</h5>
-                <p className="text-muted">Intenta ajustar los filtros de búsqueda</p>
-            </div>
-        );
-    }
+import React from "react";
+import { agregarAlCarrito } from "../utils/carrito"; // ajusta la ruta si es necesario
+
+const ProductsGrid = ({ products }) => {
+    const handleAddToCart = (product) => {
+        agregarAlCarrito({
+            id: product.idProducto,
+            nombre: product.nombreProducto,
+            precio: product.precioVenta,
+            imagen: product.urlImagen,
+            stock: product.stockActual,
+        });
+    };
+
     return (
         <div className="product-grid">
             {products.map(product => (
                 <div className="product-card" key={product.idProducto}>
                     <div className="product-image">
-                        <img src={`http://localhost:8080${product.urlImagen}`} alt={product.nombreProducto} onError={e => e.target.src="https://via.placeholder.com/150"} />
+                        <img
+                            src={`http://localhost:8080${product.urlImagen}`}
+                            alt={product.nombreProducto}
+                            style={{ width: "100%", height: "200px", objectFit: "contain" }}
+                        />
                     </div>
                     <div className="product-info">
                         <h6 className="product-name">{product.nombreProducto}</h6>
                         <p className="product-description">{product.descripcion}</p>
-                        <div className="product-price">S/ {product.precioVenta}</div>
-                        <button className="add-btn" onClick={() => onAddToCart(product)} disabled={product.stock === 0}>
-                            {product.stock === 0 ? 'Sin stock' : 'Añadir'}
+                        <div className="product-price text-success fw-bold">
+                            S/ {product.precioVenta}
+                        </div>
+                        <button
+                            className="add-btn btn btn-dark w-100 mt-2"
+                            onClick={() => handleAddToCart(product)}
+                            disabled={product.stockActual === 0}
+                        >
+                            {product.stockActual === 0 ? "Sin stock" : "Añadir"}
                         </button>
-                        <small className="text-muted d-block mt-2">Stock: {product.stock} unidades</small>
+                        <small className="text-muted d-block mt-2">
+                            Stock: {product.stockActual ?? "0"} unidades
+                        </small>
                     </div>
                 </div>
             ))}
         </div>
     );
 };
+
 export default ProductsGrid;

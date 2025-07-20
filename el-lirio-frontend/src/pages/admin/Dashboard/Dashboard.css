@@ -13,3 +13,30 @@
     }
 }
 
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+.admin-sidebar {
+    width: 240px;
+    background: #223047;
+}
+.admin-main {
+    background: #f5f6fa;
+    width: 100%;
+    min-height: 100vh;
+}
+.sidebar-title {
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+}
+.sidebar-menu li {
+    padding: 0.7rem 1rem;
+    border-radius: 0.8rem;
+    margin-bottom: 0.3rem;
+    transition: background 0.1s;
+}
+.sidebar-menu li.active, .sidebar-menu li:hover {
+    background: #384860;
+}

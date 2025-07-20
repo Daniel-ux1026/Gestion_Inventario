@@ -8,12 +8,23 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Obtén el total del carrito
-        const carrito = obtenerCarrito();
-        setCantidad(carrito.reduce((sum, p) => sum + (p.cantidad || 0), 0));
-        // Lee usuario
+        // Función para actualizar cantidad del carrito
+        const actualizarCantidad = () => {
+            const carrito = obtenerCarrito();
+            setCantidad(carrito.reduce((sum, p) => sum + (p.cantidad || 0), 0));
+        };
+
+        // Escuchar cambios en el carrito (evento global)
+        window.addEventListener("carritoActualizado", actualizarCantidad);
+        // Carga inicial
+        actualizarCantidad();
+
+        // Leer usuario al cargar
         const usuarioGuardado = localStorage.getItem("usuario");
         setUsuario(usuarioGuardado ? JSON.parse(usuarioGuardado) : null);
+
+        // Cleanup listener al desmontar
+        return () => window.removeEventListener("carritoActualizado", actualizarCantidad);
     }, []);
 
     const handleLogout = () => {

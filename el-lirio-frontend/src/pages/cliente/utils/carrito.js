@@ -1,3 +1,5 @@
+// utils/carrito.js
+
 // Obtener carrito como arreglo
 export function obtenerCarrito() {
     try {
@@ -36,6 +38,9 @@ export function agregarAlCarrito(producto) {
         }
 
         guardarCarrito(carrito);
+
+        // Disparar evento global para actualizar contador en Navbar
+        window.dispatchEvent(new Event("carritoActualizado"));
     } catch (error) {
         console.error("❌ Error al agregar al carrito:", error);
     }
