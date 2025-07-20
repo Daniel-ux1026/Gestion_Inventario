@@ -1,55 +1,117 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import { Carousel } from "react-bootstrap";
 
-const Ofertas = () => {
-    const [productosOferta, setProductosOferta] = useState([]);
+// Banners (asegúrate que existan estos archivos en tu estructura)
+import banner1 from "../../assets/img/banner/banner1.jpg";
+import banner2 from "../../assets/img/banner/banner2.jpg";
+import banner3 from "../../assets/img/banner/banner3.jpg";
+import banner4 from "../../assets/img/banner/banner4.jpg";
+import banner5 from "../../assets/img/banner/banner5.jpg";
 
-    useEffect(() => {
-        axios.get("http://localhost:8080/api/ofertas")
-            .then(res => setProductosOferta(res.data || []))
-            .catch(() => setProductosOferta([]));
-    }, []);
+// Productos (asegúrate de tener estas imágenes)
+import arroz from "../../../../uploads/productos/arroz.jpg";
+import aceite from "../../../../uploads/productos/aceite.jpg";
+import atun from "../../../../uploads/productos/atun-campomar.jpg";
+import cafe from "../../../../uploads/productos/cafe_altomayo.jpg";
+import fideo from "../../../../uploads/productos/fideos.jpg";
 
-    if (productosOferta.length === 0) {
-        return <div className="container text-center mt-5"><h3>No hay ofertas disponibles en este momento.</h3></div>;
-    }
+const banners = [
+    { id: 1, src: banner1, alt: "Oferta 1" },
+    { id: 2, src: banner2, alt: "Oferta 2" },
+    { id: 3, src: banner3, alt: "Oferta 3" },
+    { id: 4, src: banner4, alt: "Oferta 4" },
+    { id: 5, src: banner5, alt: "Oferta 5" },
+];
 
-    return (
-        <div className="container mt-4">
-            <h2 className="text-danger mb-4 text-center">🔥 Ofertas Especiales 🔥</h2>
-            <div className="row">
-                {productosOferta.map(prod => (
-                    <div className="col-sm-6 col-md-4 col-lg-3" key={prod.idProducto}>
-                        <div className="card mb-4 border-danger shadow-sm position-relative">
-                            <span className="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
-                                -{prod.porcentajeDescuento || Math.round(100 - prod.precioOferta * 100 / prod.precioVenta)}%
-                            </span>
+const productosOferta = [
+    {
+        id: 1,
+        nombre: "Arroz Extra Costeño",
+        precio: 10.5,
+        precioOferta: 7.99,
+        imagen: arroz,
+    },
+    {
+        id: 2,
+        nombre: "Aceite Primor",
+        precio: 9.5,
+        precioOferta: 6.99,
+        imagen: aceite,
+    },
+    {
+        id: 3,
+        nombre: "Atún Campomar",
+        precio: 7.0,
+        precioOferta: 5.20,
+        imagen: atun,
+    },
+    {
+        id: 4,
+        nombre: "Café Altomayo",
+        precio: 15.5,
+        precioOferta: 11.50,
+        imagen: cafe,
+    },
+    {
+        id: 5,
+        nombre: "Fideos Don Vittorio",
+        precio: 6.2,
+        precioOferta: 4.80,
+        imagen: fideo,
+    },
+];
+
+const Ofertas = () => (
+    <div className="container my-4">
+        {/* Banner/Carrusel */}
+        <Carousel>
+            {banners.map((banner) => (
+                <Carousel.Item key={banner.id}>
+                    <img
+                        className="d-block w-100"
+                        src={banner.src}
+                        alt={banner.alt}
+                        style={{ maxHeight: 300, objectFit: "cover" }}
+                    />
+                </Carousel.Item>
+            ))}
+        </Carousel>
+
+        {/* Productos en oferta */}
+        <h4 className="mt-4 mb-3">Productos en Oferta</h4>
+        <div className="row">
+            {productosOferta.length === 0 ? (
+                <div className="col-12">
+                    <p className="text-center">No hay ofertas disponibles en este momento.</p>
+                </div>
+            ) : (
+                productosOferta.map((prod) => (
+                    <div className="col-md-3 mb-4" key={prod.id}>
+                        <div className="card h-100">
                             <img
-                                src={`http://localhost:8080${prod.urlImagen}`}
-                                alt={prod.nombreProducto}
+                                src={prod.imagen}
                                 className="card-img-top"
-                                style={{ height: "180px", objectFit: "contain" }}
+                                alt={prod.nombre}
+                                style={{ maxHeight: 290, objectFit: "cover" }}
                             />
                             <div className="card-body">
-                                <h5 className="card-title">{prod.nombreProducto}</h5>
-                                <p className="card-text small">{prod.descripcion}</p>
-                                <div>
-                                    <span className="text-secondary text-decoration-line-through me-2">
-                                        S/ {prod.precioVenta}
-                                    </span>
-                                    <span className="text-danger fw-bold fs-5">
-                                        S/ {prod.precioOferta}
-                                    </span>
-                                </div>
-                                <button className="btn btn-outline-danger w-100 mt-2">
-                                    <i className="bi bi-cart-plus"></i> Añadir al carrito
+                                <h6 className="card-title">{prod.nombre}</h6>
+                                <p className="mb-1 text-decoration-line-through text-secondary">
+                                    S/. {prod.precio.toFixed(2)}
+                                </p>
+                                <p className="fw-bold text-success">
+                                    S/. {prod.precioOferta.toFixed(2)}
+                                </p>
+                                <button className="btn btn-primary w-100">
+                                    Agregar al carrito
                                 </button>
                             </div>
                         </div>
                     </div>
-                ))}
-            </div>
+                ))
+            )}
         </div>
-    );
-};
+    </div>
+);
+
 export default Ofertas;

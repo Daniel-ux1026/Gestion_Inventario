@@ -1,11 +1,14 @@
 import Navbar from "../pages/cliente/components/Navbar.jsx";
 import Footer from "../pages/cliente/components/Footer.jsx";
+import { Outlet } from "react-router-dom"; // <-- IMPORTANTE
 
-export default function ClienteLayout({ children }) {
+export default function ClienteLayout() {
     return (
         <div className="d-flex flex-column min-vh-100">
             <Navbar />
-            <main className="flex-grow-1">{children}</main>
+            <main className="flex-grow-1">
+                <Outlet />  {/* <--- AQUI VA! */}
+            </main>
             <Footer />
             {/* Botón flotante WhatsApp */}
             <a

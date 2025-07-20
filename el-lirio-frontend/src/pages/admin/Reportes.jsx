@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 
 const Reportes = () => {
     const [fechaInicio, setFechaInicio] = useState('');
@@ -8,9 +9,7 @@ const Reportes = () => {
             alert('Selecciona ambas fechas antes de generar un reporte.');
             return;
         }
-
         alert(`📊 Generando "${reporte}" desde ${fechaInicio} hasta ${fechaFin}`);
-        // Aquí podrías navegar, generar PDF, llamar a una API, etc.
     };
 
     const reportes = [
@@ -25,10 +24,7 @@ const Reportes = () => {
 
     return (
         <div className="container mt-4">
-            <Volver />
             <h4 className="mb-4">Reportes</h4>
-
-            {/* Filtros por Fecha */}
             <div className="row mb-4">
                 <div className="col-md-3">
                     <label>Fecha Inicio:</label>
@@ -57,8 +53,6 @@ const Reportes = () => {
                     </button>
                 </div>
             </div>
-
-            {/* Cuadros de Reportes */}
             <div className="row g-4">
                 {reportes.map((reporte, idx) => (
                     <div className="col-md-4" key={idx}>
@@ -84,4 +78,3 @@ const Reportes = () => {
 };
 
 export default Reportes;
-
