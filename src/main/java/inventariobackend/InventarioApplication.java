@@ -35,13 +35,8 @@ public class InventarioApplication {
         System.out.println("🔄 Habilitando transacciones...");
         System.out.println("⏰ Configurando tareas asíncronas...");
         System.out.println();
-        System.out.println();
         System.out.println("✅ ¡Sistema de Inventario iniciado exitosamente!");
         System.out.println("🌐 Servidor disponible en: http://localhost:8080/");
-        System.out.println("📊 Panel administrativo: http://localhost:8080/admin");
-        System.out.println("🔧 API REST: http://localhost:8080/api/v1/");
-        System.out.println("📖 Documentación: http://localhost:8080/swagger-ui.html");
-        System.out.println();
         System.out.println("💡 Para detener el servidor: Ctrl+C");
         System.out.println("🌸 El Lirio de los Valles - ¡Listo para gestionar tu inventario! 🌸");
         System.out.println();

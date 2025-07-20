@@ -43,4 +43,36 @@ CREATE TABLE pedido (
   fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS pedido;
+
+CREATE TABLE pedido (
+                        id_pedido INT PRIMARY KEY AUTO_INCREMENT,
+                        cliente_nombre VARCHAR(200) NOT NULL,
+                        total DECIMAL(10,2) NOT NULL,
+                        metodo_pago ENUM('YAPE', 'PLIN', 'TRANSFERENCIA', 'EFECTIVO') NOT NULL,
+                        comprobante_url VARCHAR(500),
+                        estado ENUM('PENDIENTE_VALIDACION', 'APROBADO', 'RECHAZADO') DEFAULT 'PENDIENTE_VALIDACION',
+                        productos TEXT, -- JSON con los productos del carrito
+                        fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE pedido ADD COLUMN cliente_email VARCHAR(255);
+
 ```
+
+
+````markdown
+[ADMIN entra a /admin/validar-pagos]
+    |
+[ValidarPagos.jsx pide GET /api/pedidos/pendientes]
+    |
+[Backend verifica que eres ADMIN]
+    |
+[Responde con pedidos pendientes]
+    |
+[Admin aprueba/rechaza: PUT a /api/pedidos/{id}/aprobar o /rechazar]
+    |
+[Backend cambia estado, el frontend actualiza lista]
+
+````

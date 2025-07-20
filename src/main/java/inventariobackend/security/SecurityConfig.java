@@ -25,15 +25,34 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true); // Si vas a enviar cookies/token, debe estar en true
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173"  // ¡No uses "*" aquí!
-                // Agrega otros orígenes explícitos si los usas, ejemplo:
-                // "https://tudominio.com"
+        configuration.setAllowCredentials(true);
+
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "http://localhost:5173",
+                "http://localhost:*"
         ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Disposition")); // Opcional
+
+        configuration.setAllowedMethods(Arrays.asList(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
+        ));
+
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With",
+                "Accept",
+                "Origin",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers"
+        ));
+
+        configuration.setExposedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Disposition"
+        ));
+
+        configuration.setMaxAge(3600L);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -46,17 +65,29 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         // Endpoints públicos
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/productos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios/registro").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pedidos").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/pedidos/comprobante/**").permitAll()
+
+                        // TEMPORAL: Hacer público el endpoint de pedidos por email para debugging
+                        .requestMatchers(HttpMethod.GET, "/api/pedidos/cliente/email/**").permitAll()
+
+                        .requestMatchers("/api/pedidos/pendientes").permitAll()
+                        .requestMatchers("/api/pedidos/*/aprobar").permitAll()
+                        .requestMatchers("/api/pedidos/*/rechazar").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/pedidos").hasRole("ADMIN")
+
                         // Endpoints solo para ADMIN
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // Endpoints solo para CLIENTE
                         .requestMatchers("/api/cliente/**").hasRole("CLIENTE")
                         // Usuarios solo admin
                         .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
+
                         // Cualquier otro endpoint requiere login
                         .anyRequest().authenticated()
                 );
