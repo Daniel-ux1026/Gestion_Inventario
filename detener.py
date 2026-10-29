@@ -10,6 +10,10 @@ from ejecucion import STATE, REQUEST, read_json, write_json
 def main():
     state = read_json(STATE)
     identifier = state.get("id")
+    if state.get("status") == "stopped" and state.get("errors"):
+        print("La ultima detencion no pudo cerrar todos los servicios: "
+              + "; ".join(state["errors"]) + ". Revisa los registros de .data/.", file=sys.stderr)
+        return 1
     if not identifier or state.get("status") != "running":
         print("El proyecto ya esta detenido. No hay servicios que cerrar.")
         return 0

@@ -7,7 +7,7 @@ Fecha: 28 de octubre de 2026. Entorno: Windows, Java 21.0.10, Node 24.18, Python
 | Contexto y API Java | 19 pruebas, 0 errores |
 | Chatbot por reglas | 8 pruebas, 0 errores |
 | Navegador en escritorio y móvil | 12 pruebas, 0 errores |
-| Coordinación de inicio y cierre | 4 pruebas, 0 errores |
+| Coordinación de inicio y cierre | 5 pruebas, 0 errores |
 | Accesos de Windows (.bat) | Inicio, cierre y reinicio correctos; los tres puertos quedan libres |
 | Compilación de React | Correcta |
 | Auditoría npm tras parches compatibles | 0 vulnerabilidades |

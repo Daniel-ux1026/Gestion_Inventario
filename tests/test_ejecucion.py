@@ -47,6 +47,11 @@ class LifecycleTests(unittest.TestCase):
             self.assertEqual(0, detener.main())
         self.assertFalse(self.run.request.exists())
 
+    def test_incomplete_shutdown_is_not_reported_as_success(self):
+        self.run.finish(["Servicio de prueba pendiente"])
+        with patch.object(detener, "STATE", self.run.state), patch("sys.stderr"):
+            self.assertEqual(1, detener.main())
+
 
 if __name__ == "__main__":
     unittest.main()
