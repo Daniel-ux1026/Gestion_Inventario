@@ -98,6 +98,22 @@ def tunnel_url(child):
     raise RuntimeError("Cloudflare no genero un enlace a tiempo. Revisa .data/cloudflare.log.")
 
 
+def stop_tunnel(child):
+    if child is not None and child.poll() is None:
+        child.terminate()
+        child.wait(timeout=10)
+    for entry in list(iniciar.CHILDREN):
+        if entry[1] is child:
+            entry[2].close()
+            iniciar.CHILDREN.remove(entry)
+
+
+def pause(seconds):
+    for _ in range(seconds):
+        iniciar.check_stop()
+        time.sleep(1)
+
+
 def open_tunnel(binary, config):
     for attempt in range(3):
         iniciar.check_stop()
@@ -107,15 +123,52 @@ def open_tunnel(binary, config):
         try:
             return child, tunnel_url(child)
         except RuntimeError:
-            if child.poll() is None:
-                child.terminate()
-                child.wait(timeout=10)
+            stop_tunnel(child)
             if attempt == 2:
                 raise
             print("Cloudflare no respondio. Reintentando la conexion (" + str(attempt + 2) + "/3)...", flush=True)
-            for _ in range(3):
-                iniciar.check_stop()
-                time.sleep(1)
+            pause(3)
+
+
+def monitor_tunnel(tunnel, origin, reconnect):
+    failures = 0
+    delay = 20
+    while True:
+        pause(delay)
+        if tunnel is None or tunnel.poll() is not None:
+            failures = 3
+        elif iniciar.ready("http://127.0.0.1:8088/api/v1/health"):
+            # cloudflared may keep running after its temporary tunnel disappears.
+            failures = 0 if iniciar.ready(origin + "/api/v1/health") else failures + 1
+        else:
+            failures = 0
+        if failures < 3:
+            continue
+        try:
+            tunnel, origin = reconnect(tunnel)
+            failures = 0
+            delay = 20
+        except (RuntimeError, OSError, subprocess.SubprocessError) as error:
+            print("La conexion sigue sin estar disponible: " + str(error) +
+                  ". Se reintentara en 60 segundos; los servicios locales siguen activos.", flush=True)
+            tunnel = None
+            delay = 60
+
+
+def start_services(compose, environment, build_flag):
+    build = iniciar.start("docker-build", compose + ["up", build_flag, "-d"], ROOT, environment)
+    while build.poll() is None:
+        iniciar.check_stop()
+        time.sleep(0.5)
+    if build.returncode:
+        raise RuntimeError("Docker no pudo iniciar la prueba. Revisa .data/docker-build.log.")
+    wait_ready("http://127.0.0.1:8088")
+
+
+def save_publication(public, origin):
+    LINK_FILE.write_text(public + "\n", encoding="utf-8")
+    write_json(iniciar.ACTIVE_RUN.state, {"id": iniciar.ACTIVE_RUN.identifier, "pid": os.getpid(),
+               "status": "running", "mode": "cloudflare", "url": public, "origin": origin})
 
 
 def wait_ready(url, seconds=180):
@@ -165,29 +218,39 @@ def main():
         existing = subprocess.run([docker, "image", "inspect", "--format", "{{.Id}}", *images],
                                   capture_output=True, timeout=20).returncode == 0
         build_flag = "--build" if args.reconstruir or not existing else "--no-build"
-        build = iniciar.start("docker-build", compose + ["up", build_flag, "-d"], ROOT, environment)
-        while build.poll() is None:
-            iniciar.check_stop()
-            time.sleep(0.5)
-        if build.returncode:
-            raise RuntimeError("Docker no pudo iniciar la prueba. Revisa .data/docker-build.log.")
-        wait_ready("http://127.0.0.1:8088")
+        start_services(compose, environment, build_flag)
         public = direccion_fija.connect(origin, iniciar.ACTIVE_RUN.identifier)
         print("Servicios listos. Comprobando el acceso por HTTPS...", flush=True)
         wait_ready(public)
-        LINK_FILE.write_text(public + "\n", encoding="utf-8")
-        write_json(iniciar.ACTIVE_RUN.state, {"id": iniciar.ACTIVE_RUN.identifier, "pid": os.getpid(),
-                   "status": "running", "mode": "cloudflare", "url": public, "origin": origin})
+        save_publication(public, origin)
         print("\nENLACE PARA TUS CLIENTES: " + public, flush=True)
         print("Acceso privado del administrador: .data/ACCESO_ADMINISTRADOR.txt", flush=True)
         print("Manten Docker y esta ventana abiertos. DETENER_PROYECTO.bat cierra la publicacion.", flush=True)
         if not args.sin_abrir:
             webbrowser.open(public)
-        while True:
-            iniciar.check_stop()
-            if tunnel.poll() is not None:
-                raise RuntimeError("El tunel se detuvo. Reinicia COMPARTIR_PROYECTO.bat para volver a conectar la tienda.")
-            time.sleep(1)
+        def reconnect(previous):
+            nonlocal public
+            print("La conexion de Cloudflare se perdio. Reconectando la tienda...", flush=True)
+            stop_tunnel(previous)
+            replacement, new_origin = open_tunnel(binary, config)
+            try:
+                new_public = direccion_fija.fixed_url() or new_origin
+                values.update({"FRONTEND_URL": new_public,
+                               "CORS_ORIGINS": new_public + "," + new_origin + ",http://127.0.0.1:8088,http://localhost:8088"})
+                save_settings(values)
+                environment.update(values)
+                start_services(compose, environment, "--no-build")
+                new_public = direccion_fija.connect(new_origin, iniciar.ACTIVE_RUN.identifier)
+                wait_ready(new_public)
+                public = new_public
+                save_publication(public, new_origin)
+                print("Conexion recuperada. ENLACE PARA TUS CLIENTES: " + public, flush=True)
+                return replacement, new_origin
+            except BaseException:
+                stop_tunnel(replacement)
+                raise
+
+        monitor_tunnel(tunnel, origin, reconnect)
     finally:
         errors = iniciar.stop()
         if public:
