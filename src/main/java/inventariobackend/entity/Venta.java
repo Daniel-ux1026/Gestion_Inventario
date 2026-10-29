@@ -62,7 +62,7 @@ public class Venta {
 
     @PrePersist
     protected void onCreate() {
-        fechaRegistro = LocalDateTime.now();
+        fechaRegistro = LocalDateTime.now(java.time.ZoneId.of("America/Lima"));
     }
 
     public enum MetodoPago {

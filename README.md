@@ -105,7 +105,7 @@ Abre **http://localhost:8088**. Este modo no carga operaciones de ejemplo. Consu
 
 La última orden inicia servicios temporales, captura pantallas, prueba escritorio y móvil y los detiene. Las pruebas Java usan una base en memoria aislada. Las pruebas de navegador crean registros en la demostración local.
 
-**Resultados:** 18 pruebas Java, 12 de navegador y 8 de chatbot aprobadas; compilación correcta y 0 vulnerabilidades npm. Las capturas provienen de la aplicación funcionando. [Resultados y alcance](docs/VALIDACION.md).
+**Resultados:** 19 pruebas Java, 12 de navegador y 8 de chatbot aprobadas; compilación correcta y 0 vulnerabilidades npm. Las capturas provienen de la aplicación funcionando. [Resultados y alcance](docs/VALIDACION.md).
 
 ## Estructura
 

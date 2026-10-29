@@ -31,6 +31,6 @@ public class Categoria {
 
     @PrePersist
     protected void onCreate() {
-        fechaCreacion = LocalDateTime.now();
+        fechaCreacion = LocalDateTime.now(java.time.ZoneId.of("America/Lima"));
     }
 }

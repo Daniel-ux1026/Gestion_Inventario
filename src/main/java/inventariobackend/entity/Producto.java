@@ -65,12 +65,12 @@ public class Producto {
 
     @PrePersist
     protected void onCreate() {
-        fechaCreacion = LocalDateTime.now();
-        fechaActualizacion = LocalDateTime.now();
+        fechaCreacion = LocalDateTime.now(java.time.ZoneId.of("America/Lima"));
+        fechaActualizacion = LocalDateTime.now(java.time.ZoneId.of("America/Lima"));
     }
 
     @PreUpdate
     protected void onUpdate() {
-        fechaActualizacion = LocalDateTime.now();
+        fechaActualizacion = LocalDateTime.now(java.time.ZoneId.of("America/Lima"));
     }
 }

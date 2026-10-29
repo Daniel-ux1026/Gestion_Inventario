@@ -88,7 +88,7 @@ public class AuthApi {
         users.findByEmail(data.email().trim().toLowerCase(Locale.ROOT)).ifPresent(u -> {
             String token = UUID.randomUUID().toString() + UUID.randomUUID();
             PasswordReset reset = new PasswordReset();
-            reset.setHash(digest(token)); reset.setEmail(u.getEmail()); reset.setExpires(LocalDateTime.now().plusMinutes(20)); resets.save(reset);
+            reset.setHash(digest(token)); reset.setEmail(u.getEmail()); reset.setExpires(LocalDateTime.now(java.time.ZoneId.of("America/Lima")).plusMinutes(20)); resets.save(reset);
             SimpleMailMessage msg = new SimpleMailMessage(); msg.setFrom(mailUser); msg.setTo(u.getEmail());
             msg.setSubject("El Lirio · Restablece tu contraseña");
             msg.setText("Abre este enlace (válido durante 20 minutos): " + frontend + "/reset-password?token=" + token);
@@ -100,7 +100,7 @@ public class AuthApi {
     @PostMapping("/reset") @Transactional
     public Map<String,String> reset(@Valid @RequestBody Reset data, HttpServletRequest req) {
         limit("reset:" + req.getRemoteAddr());
-        PasswordReset r = resets.findById(digest(data.token())).filter(p -> p.getExpires().isAfter(LocalDateTime.now()))
+        PasswordReset r = resets.findById(digest(data.token())).filter(p -> p.getExpires().isAfter(LocalDateTime.now(java.time.ZoneId.of("America/Lima"))))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Enlace inválido o vencido"));
         Usuario u = users.findByEmail(r.getEmail()).orElseThrow();
         u.setPassword(encoder.encode(data.password())); users.save(u); resets.delete(r);

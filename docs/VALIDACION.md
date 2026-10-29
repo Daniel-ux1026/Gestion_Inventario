@@ -4,7 +4,7 @@ Fecha: 28 de octubre de 2026. Entorno: Windows, Java 21.0.10, Node 24.18, Python
 
 | Verificación | Resultado |
 |---|---|
-| Contexto y API Java | 18 pruebas, 0 errores |
+| Contexto y API Java | 19 pruebas, 0 errores |
 | Chatbot por reglas | 8 pruebas, 0 errores |
 | Navegador en escritorio y móvil | 12 pruebas, 0 errores |
 | Compilación de React | Correcta |
@@ -19,3 +19,5 @@ Las pruebas de navegador cubren búsqueda, categorías, favoritos, permisos, reg
 La verificación visual incluye las capturas en docs/images. La prueba móvil usa Chromium con viewport táctil 390 × 844; no sustituye una prueba física en Safari de iPhone.
 
 La validación no incluye SMTP con credenciales reales, pagos bancarios, facturación electrónica ni despliegue público. Los pagos se confirman manualmente.
+
+Se verifica también que los pedidos y reportes usan America/Lima aunque el host de pruebas utilice UTC.

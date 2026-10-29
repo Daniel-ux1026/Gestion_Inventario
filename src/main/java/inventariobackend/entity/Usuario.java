@@ -47,12 +47,12 @@ public class Usuario {
 
     @PrePersist
     protected void onCreate() {
-        fechaRegistro = LocalDateTime.now();
-        fechaActualizacion = LocalDateTime.now();
+        fechaRegistro = LocalDateTime.now(java.time.ZoneId.of("America/Lima"));
+        fechaActualizacion = LocalDateTime.now(java.time.ZoneId.of("America/Lima"));
     }
 
     @PreUpdate
     protected void onUpdate() {
-        fechaActualizacion = LocalDateTime.now();
+        fechaActualizacion = LocalDateTime.now(java.time.ZoneId.of("America/Lima"));
     }
 }

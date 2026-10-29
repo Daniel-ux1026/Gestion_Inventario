@@ -105,7 +105,7 @@ public class StoreService {
     }
     void movement(Producto p,int qty,String reason) {
         movements.save(Kardex.builder().producto(p).cantidad(qty).stockResultante(p.getStockActual())
-                .fecha(LocalDateTime.now()).tipoMovimiento(reason.substring(0,Math.min(200,reason.length()))).build());
+                .fecha(LocalDateTime.now(java.time.ZoneId.of("America/Lima"))).tipoMovimiento(reason.substring(0,Math.min(200,reason.length()))).build());
     }
     List<OrderLine> lines(Pedido p) {
         if (p.getProductos()==null) return List.of();
@@ -202,7 +202,7 @@ public class StoreService {
     public List<Map<String,Object>> purchaseList() { return purchases.findAll().stream().sorted(Comparator.comparing(Compra::getIdCompra).reversed()).map(this::purchase).toList(); }
     @Transactional public Map<String,Object> createPurchase(PurchaseInput data,String email) {
         Compra c=new Compra(); c.setProveedor(suppliers.findById(data.proveedorId()).filter(p -> Boolean.TRUE.equals(p.getActivo())).orElseThrow(StoreService::missing));
-        c.setUsuario(users.findByEmail(email).orElseThrow()); c.setFechaCompra(LocalDate.now());
+        c.setUsuario(users.findByEmail(email).orElseThrow()); c.setFechaCompra(LocalDate.now(java.time.ZoneId.of("America/Lima")));
         c.setNumeroCompra("OC-"+UUID.randomUUID().toString().substring(0,12).toUpperCase(Locale.ROOT)); c.setObservaciones(data.observaciones());
         List<DetalleCompra> details=new ArrayList<>(); BigDecimal total=BigDecimal.ZERO;
         Set<Integer> seen=new HashSet<>();

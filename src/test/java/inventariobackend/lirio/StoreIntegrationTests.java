@@ -167,4 +167,11 @@ class StoreIntegrationTests {
         store.restoreProduct(product.getIdProducto());assertEquals(1,store.catalog(false).size());
         assertEquals(o.id(),store.orderList(email,false).getFirst().id());
     }
+    @Test void orderDatesUseLimaEvenWhenHostUsesUtc() {
+        var o=checkout(order(1,"timezone-test-key-001"));
+        assertEquals(java.time.LocalDate.now(java.time.ZoneId.of("America/Lima")),o.fecha().toLocalDate());
+        store.transition(o.id(),"APROBADO");
+        assertEquals(new BigDecimal("4.28"),store.summary(7).get("ventas"));
+    }
+
 }
