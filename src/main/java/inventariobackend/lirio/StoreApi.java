@@ -18,7 +18,8 @@ public class StoreApi {
     private final Environment environment;
     boolean admin(Authentication a) { return a.getAuthorities().stream().anyMatch(g -> "ROLE_ADMIN".equals(g.getAuthority())); }
     @GetMapping("/health") public Map<String,Object> health() {
-        return Map.of("status","ok","demo",Arrays.asList(environment.getActiveProfiles()).contains("demo") || (environment.getActiveProfiles().length==0 && Arrays.asList(environment.getDefaultProfiles()).contains("demo")));
+        return Map.of("status","ok","demo",environment.matchesProfiles("demo", "preview"),
+                      "demoAccounts",environment.matchesProfiles("demo"));
     }
     @GetMapping("/business") public BusinessSettings business() { return store.business(); }
     @GetMapping("/catalog") public List<ProductView> catalog() { return store.catalog(false); }

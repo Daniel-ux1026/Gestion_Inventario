@@ -19,7 +19,8 @@ services:
     depends_on:
       db: {condition: service_healthy}
     environment:
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      LIRIO_SAMPLE_CATALOG: ${LIRIO_SAMPLE_CATALOG:-false}
       DB_URL: jdbc:mysql://db:3306/${DB_NAME:-lirio}?serverTimezone=America/Lima
       DB_USER: ${DB_USER:-lirio}
       DB_PASSWORD: ${DB_PASSWORD:?Completa DB_PASSWORD}
@@ -43,7 +44,7 @@ services:
     build: ./el-lirio-frontend
     restart: unless-stopped
     depends_on: [backend, chatbot]
-    ports: ["8088:80"]
+    ports: ["${WEB_BIND_ADDRESS:-127.0.0.1}:${WEB_PORT:-8088}:80"]
 volumes:
   mysql_data:
   receipts:

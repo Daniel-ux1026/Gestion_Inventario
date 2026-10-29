@@ -75,6 +75,8 @@ La demostración usa **H2 local persistente**, independiente de MySQL, con 24 pr
 
 ## Instalar con MySQL
 
+Para compartir una prueba gratuita por internet, inicia Docker Desktop y abre **COMPARTIR_PROYECTO.bat**. Genera un enlace HTTPS con Cloudflare Quick Tunnel y una base MySQL separada. El enlace queda en **.data/enlace_publico.txt** y tu acceso privado en **.data/ACCESO_ADMINISTRADOR.txt**. **DETENER_PROYECTO.bat** cierra la publicación y conserva sus datos. [Instrucciones y límites de la prueba](docs/CLOUDFLARE.md).
+
 Incluye **Docker Compose**, backend Java, Nginx y chatbot bajo el mismo origen. Copia **.env.example** a **.env**, completa los secretos y ejecuta:
 
     docker compose up --build -d
@@ -112,7 +114,7 @@ Abre **http://localhost:8088**. Este modo no carga operaciones de ejemplo. Consu
 
 La última orden inicia servicios temporales, captura pantallas, prueba escritorio y móvil y los detiene. Las pruebas Java usan una base en memoria aislada. Las pruebas de navegador crean registros en la demostración local.
 
-**Resultados:** 19 pruebas Java, 12 de navegador, 8 de chatbot y 5 de coordinación de inicio/cierre aprobadas; compilación correcta y 0 vulnerabilidades npm. También se comprobó el ciclo real de los accesos de Windows. Las capturas provienen de la aplicación funcionando. [Resultados y alcance](docs/VALIDACION.md).
+**Resultados:** 20 pruebas Java, 12 de navegador, 8 de chatbot y 8 de los scripts de inicio, cierre y publicación aprobadas; compilación correcta y 0 vulnerabilidades npm. Las 12 pruebas de navegador también pasaron a través de Cloudflare con MySQL en Docker. Se verificó conservar pedidos, stock y comprobantes al detener y reiniciar la publicación. Las capturas provienen de la aplicación funcionando. [Resultados y alcance](docs/VALIDACION.md).
 
 ## Estructura
 

@@ -7,7 +7,9 @@
 
 MySQL y los comprobantes usan volúmenes persistentes. Solo Nginx publica un puerto. El perfil prod no crea productos, ventas ni cuentas de demostración; inicializa roles, configuración y el administrador definido por entorno.
 
-En una instalación nueva JPA genera el esquema. Antes de conectar una base existente, respáldala y prueba la adaptación en una copia. No importes el volcado original sobre datos reales. Para acceso público usa HTTPS y un dominio del propietario. Esta entrega no publica la aplicación en un alojamiento externo.
+En una instalación nueva JPA genera el esquema. Antes de conectar una base existente, respáldala y prueba la adaptación en una copia. No importes el volcado original sobre datos reales. Para una prueba pública gratuita usa [Cloudflare Quick Tunnel](CLOUDFLARE.md). Para alojamiento permanente configura HTTPS y un dominio del propietario.
+
+La web escucha de forma predeterminada en **127.0.0.1:8088**. Cloudflare o un proxy inverso local pueden acceder a ese puerto. Si necesitas publicarlo directamente en otras interfaces de red, configura **WEB_BIND_ADDRESS** expresamente.
 
 ## Operación
 
@@ -23,7 +25,7 @@ La configuración del avance original contenía valores literales para base de d
 
 ## Alcance de la validación
 
-Se ejecutaron el backend, la interfaz y Streamlit con H2 local. Docker Desktop no tenía el motor activo en este equipo: la ejecución de los contenedores y la integración contra MySQL quedan pendientes de verificar. Compose se valida por separado.
+Se ejecutaron el backend, la interfaz y Streamlit con H2 local y también con MySQL 8.4 en Docker. Se comprobó la publicación temporal con Cloudflare, las operaciones de navegador por HTTPS y la conservación de pedidos, stock y comprobantes al detener y volver a iniciar. Consulta los [resultados y límites de validación](VALIDACION.md).
 
 Se conservó la línea Spring Boot 3.5, actualizada a 3.5.16. Esta línea terminó su soporte abierto; antes de operar públicamente sin soporte comercial, planifica una actualización a una línea con soporte. [Anuncio oficial de Spring](https://spring.io/blog/2026/06/25/spring-boot-3-5-16-available-now/).
 

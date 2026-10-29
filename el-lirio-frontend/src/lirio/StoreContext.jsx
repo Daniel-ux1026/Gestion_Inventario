@@ -24,6 +24,7 @@ export function StoreProvider({ children }) {
     telefono: "948656772",
   });
   const [demo, setDemo] = useState(false);
+  const [demoAccounts, setDemoAccounts] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [cart, setCart] = useState(() => {
@@ -59,6 +60,7 @@ export function StoreProvider({ children }) {
       setProducts(p);
       setBusiness(b);
       setDemo(h.demo);
+      setDemoAccounts(h.demoAccounts ?? h.demo);
     } catch {
       setError(
         "No pudimos conectar con la tienda. Comprueba que el servidor esté encendido e inténtalo otra vez.",
@@ -161,6 +163,7 @@ export function StoreProvider({ children }) {
         business,
         setBusiness,
         demo,
+        demoAccounts,
         loading,
         error,
         refresh,

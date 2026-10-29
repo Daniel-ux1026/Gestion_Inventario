@@ -11,7 +11,7 @@ import { useStore } from "./StoreContext";
 import { api } from "./api";
 
 export default function Auth({ mode = "login" }) {
-  const { signIn, demo } = useStore(),
+  const { signIn, demoAccounts } = useStore(),
     navigate = useNavigate(),
     location = useLocation(),
     [params] = useSearchParams();
@@ -234,7 +234,7 @@ export default function Auth({ mode = "login" }) {
               Volver a iniciar sesión
             </Link>
           )}
-          {demo && mode === "login" && (
+          {demoAccounts && mode === "login" && (
             <div className="demo-accounts">
               <span className="eyebrow">PRUEBA LA EXPERIENCIA</span>
               <p>Cuentas de demostración local</p>

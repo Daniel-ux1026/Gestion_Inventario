@@ -43,8 +43,9 @@ public class BootstrapData implements ApplicationRunner {
             user("Daniel","Administrador",adminEmail.toLowerCase(Locale.ROOT),adminPassword,"ADMIN");
         }
         boolean demo=env.matchesProfiles("demo");
-        if(!demo || products.count()>0) return;
-        if(!users.existsByEmail("cliente@lirio.local")) user("María","Cliente","cliente@lirio.local","ClienteDemo2026!","CLIENTE");
+        boolean sampleCatalog=env.getProperty("lirio.sample-catalog",Boolean.class,false);
+        if((!demo && !sampleCatalog) || products.count()>0) return;
+        if(demo && !users.existsByEmail("cliente@lirio.local")) user("María","Cliente","cliente@lirio.local","ClienteDemo2026!","CLIENTE");
         String[] names={"Abarrotes","Conservas","Café y desayuno","Limpieza"};
         List<Categoria> cats=new ArrayList<>();
         for(String name:names) { Categoria c=new Categoria(); c.setNombreCategoria(name); cats.add(categories.save(c)); }
@@ -85,6 +86,7 @@ public class BootstrapData implements ApplicationRunner {
             p.setStockActual(Integer.parseInt(row[7])); p.setStockMinimo(10); p.setMarca(brand); p.setProveedor(supplier); saved.add(products.save(p));
         }
         // Sample historical orders are explicit demo fixtures, never loaded into a production profile.
+        if(!demo) return;
         for(int day=6;day>=0;day--) {
             int count=new int[]{3,2,4,3,5,3,4}[6-day];
             for(int j=0;j<count;j++) {

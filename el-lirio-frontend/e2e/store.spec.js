@@ -1,9 +1,13 @@
 import { test, expect } from "@playwright/test";
-const API = "http://127.0.0.1:8080/api/v1";
+const API = process.env.PLAYWRIGHT_API_URL ||
+  (process.env.PLAYWRIGHT_BASE_URL ? process.env.PLAYWRIGHT_BASE_URL.replace(/\/$/, "") + "/api/v1" : "http://127.0.0.1:8080/api/v1");
 let session;
 test.beforeAll(async ({ request }) => {
   const r = await request.post(API + "/auth/login", {
-    data: { email: "admin@lirio.local", password: "LirioDemo2026!" },
+    data: {
+      email: process.env.PLAYWRIGHT_ADMIN_EMAIL || "admin@lirio.local",
+      password: process.env.PLAYWRIGHT_ADMIN_PASSWORD || "LirioDemo2026!",
+    },
   });
   expect(r.ok()).toBeTruthy();
   session = await r.json();
