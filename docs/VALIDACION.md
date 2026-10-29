@@ -31,7 +31,7 @@ La coordinación usa un bloqueo local y un identificador por ejecución. Una sol
 
 ## Prueba pública con Cloudflare y MySQL
 
-Se comprobó el acceso público por HTTPS con Nginx, React, Spring Boot, MySQL 8.4 y Streamlit. Las 12 pruebas de escritorio y móvil pasaron a través de la dirección de Cloudflare, incluidos registro, pedido en efectivo, permisos, edición de inventario y la respuesta del chatbot con **948656772**.
+Se comprobó el acceso público por HTTPS con Nginx, React, Spring Boot, MySQL 8.4 y Streamlit. Las 12 pruebas de escritorio y móvil pasaron a través de la dirección de Cloudflare, incluidos registro, pedido en efectivo, permisos, edición de inventario y la respuesta de contacto del chatbot.
 
 También se creó un pedido ficticio con una imagen PNG: el comprobante fue accesible para su propietario y quedó protegido sin sesión; un cliente no pudo acceder a las rutas de administración. Repetir la aprobación no volvió a descontar stock. Los accesos del demo local fueron rechazados en la instancia pública.
 

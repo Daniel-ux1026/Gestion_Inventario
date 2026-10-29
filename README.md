@@ -32,9 +32,7 @@ Sistema de ventas e inventario para **El Lirio de los Valles**, con tienda para 
 
 El chatbot está hecho con **Streamlit**, consulta el catálogo público y orienta sobre productos, pedidos, pagos, recojo, horarios y contacto. No necesita clave de IA.
 
-La alternativa **«¿Cómo contacto con la empresa?»** responde:
-
-> ¿Deseas contactar con la empresa? Llama al **948656772**. Una persona de El Lirio de los Valles te ayudará con tu consulta.
+El asistente incluye la alternativa **«¿Cómo contacto con la empresa?»** para consultar el contacto de la tienda desde la aplicación.
 
 ![Chatbot de Streamlit](docs/images/chatbot.png)
 
