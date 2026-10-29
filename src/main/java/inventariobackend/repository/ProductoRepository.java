@@ -10,6 +10,9 @@ import java.util.Optional;
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
+    @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Producto p where p.idProducto = :id")
+    Optional<Producto> lockById(@Param("id") Integer id);
 
     // Encuentra productos activos
     List<Producto> findByActivoTrue();

@@ -1,0 +1,6 @@
+legacy
+node_modules
+target
+dist
+.data
+.venv

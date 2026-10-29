@@ -1,13 +1,6 @@
 package inventariobackend;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class InventarioBackendApplicationTests {
-
-    @Test
-    void contextLoads() {
-    }
-
-}
+import org.springframework.test.context.ActiveProfiles;
+@SpringBootTest @ActiveProfiles("test")
+class InventarioBackendApplicationTests { @Test void contextLoads() {} }

@@ -1,0 +1,49 @@
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-lirio}
+      MYSQL_USER: ${DB_USER:-lirio}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Completa DB_PASSWORD en .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Completa MYSQL_ROOT_PASSWORD en .env}
+    volumes: [mysql_data:/var/lib/mysql]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      retries: 30
+      timeout: 5s
+  backend:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db: {condition: service_healthy}
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://db:3306/${DB_NAME:-lirio}?serverTimezone=America/Lima
+      DB_USER: ${DB_USER:-lirio}
+      DB_PASSWORD: ${DB_PASSWORD:?Completa DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:?Completa JWT_SECRET con un secreto aleatorio de al menos 32 caracteres}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Completa ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Completa ADMIN_PASSWORD con al menos 12 caracteres}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:8088}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8088}
+      MAIL_HOST: ${MAIL_HOST:-localhost}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USER: ${MAIL_USER:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+    volumes: [receipts:/app/.data]
+  chatbot:
+    build: ./chatbot
+    restart: unless-stopped
+    depends_on: [backend]
+    environment:
+      LIRIO_API_URL: http://backend:8080/api/v1
+  web:
+    build: ./el-lirio-frontend
+    restart: unless-stopped
+    depends_on: [backend, chatbot]
+    ports: ["8088:80"]
+volumes:
+  mysql_data:
+  receipts:

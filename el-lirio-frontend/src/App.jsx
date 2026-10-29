@@ -1,70 +1,164 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ClienteLayout from "./layouts/ClienteLayout.jsx";
-import AdminLayout from "./layouts/AdminLayout.jsx";
+import { lazy, Suspense, useEffect } from "react";
+import { Routes, Route, Navigate, useLocation, Link } from "react-router-dom";
+import { useStore } from "./lirio/StoreContext";
+import {
+  ShopLayout,
+  Home,
+  Catalog,
+  ProductDetail,
+  MyOrders,
+  Account,
+} from "./lirio/Shop";
+import Auth from "./lirio/Auth";
+import Checkout from "./lirio/Checkout";
+import { Loading, Empty } from "./lirio/UI";
+const AdminLayout = lazy(() => import("./lirio/AdminLayout"));
+const Dashboard = lazy(() => import("./lirio/Dashboard"));
+const Inventory = lazy(() => import("./lirio/Inventory"));
+const Orders = lazy(() => import("./lirio/Orders"));
+const PointOfSale = lazy(() =>
+  import("./lirio/Orders").then((m) => ({ default: m.PointOfSale })),
+);
+const Purchases = lazy(() => import("./lirio/Purchases"));
+const Suppliers = lazy(() =>
+  import("./lirio/Operations").then((m) => ({ default: m.Suppliers })),
+);
+const Customers = lazy(() =>
+  import("./lirio/Operations").then((m) => ({ default: m.Customers })),
+);
+const Movements = lazy(() =>
+  import("./lirio/Operations").then((m) => ({ default: m.Movements })),
+);
+const Business = lazy(() =>
+  import("./lirio/Operations").then((m) => ({ default: m.Business })),
+);
 
-// COMPONENTES CLIENTE
-import DetalleProducto from "./pages/cliente/DetalleProducto.jsx";
-import Home from "./pages/cliente/Home.jsx";
-import Checkout from "./pages/cliente/Checkout.jsx";
-import Ofertas from "./pages/cliente/Ofertas.jsx";
-import Login from "./pages/auth/login.jsx";
-import Register from "./pages/auth/register.jsx";
-import DetalleOferta from "./pages/cliente/DetalleOferta.jsx";
-import Recuperar from "./pages/auth/Recuperar.jsx";
-import ResetPassword from "./pages/auth/ResetPassword.jsx";
-import MisPedidos from "./pages/cliente/MisPedidos.jsx";
-// COMPONENTES ADMIN
-import Dashboard from "./pages/admin/Dashboard/Dashboard.jsx";
-import ValidarPagos from "./pages/admin/ValidarPagos.jsx";
-import Ventas from "./pages/admin/Ventas.jsx";
-import Inventario from "./pages/admin/Inventario.jsx";
-import Compras from "./pages/admin/Compras.jsx";
-import Reportes from "./pages/admin/Reportes.jsx";
-import Clientes from "./pages/admin/Clientes.jsx";
-import Fidelizacion from "./pages/admin/Fidelizacion.jsx";
-import Proveedores from "./pages/admin/Proveedores.jsx";
-import Configuracion from "./pages/admin/Configuracion.jsx";
-import PrivateRoute from "./components/PrivateRoute.jsx";
-
-export default function App() {
+function Protected({ admin = false, children }) {
+  const { user, authReady } = useStore(),
+    location = useLocation();
+  if (!authReady) return <Loading />;
+  if (!user)
     return (
-        <BrowserRouter>
-            <Routes>
-                {/* CLIENTE */}
-                <Route path="/" element={<ClienteLayout />}>
-                    <Route index element={<Home />} />
-                    <Route path="producto/:id" element={<DetalleProducto />} />
-                    <Route path="/detalle-oferta/:id" element={<DetalleOferta />} />
-                    <Route path="checkout" element={<Checkout />} />
-                    <Route path="ofertas" element={<Ofertas />} />
-                    <Route path="login" element={<Login />} />
-                    <Route path="register" element={<Register />} />
-                    <Route path="recuperar" element={<Recuperar />} />
-                    <Route path="reset-password" element={<ResetPassword />} />
-                    <Route path="/mis-pedidos" element={<MisPedidos />} />
-                </Route>
-
-                {/* ADMIN */}
-                <Route
-                    path="/admin"
-                    element={
-                        <PrivateRoute allowedRoles={["ADMIN"]}>
-                            <AdminLayout />
-                        </PrivateRoute>
-                    }
-                >
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="validar-pagos" element={<ValidarPagos />} />
-                    <Route path="ventas" element={<Ventas />} />
-                    <Route path="inventario" element={<Inventario />} />
-                    <Route path="compras" element={<Compras />} />
-                    <Route path="reportes" element={<Reportes />} />
-                    <Route path="clientes" element={<Clientes />} />
-                    <Route path="fidelizacion" element={<Fidelizacion />} />
-                    <Route path="proveedores" element={<Proveedores />} />
-                    <Route path="configuracion" element={<Configuracion />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
+      <Navigate
+        to="/login"
+        state={{ from: location.pathname + location.search }}
+        replace
+      />
     );
+  if (admin && user.rol !== "ADMIN")
+    return (
+      <div className="store-container">
+        <Empty
+          title="Este espacio es para administradores"
+          text="Tu cuenta de cliente puede seguir comprando en la tienda."
+          action={
+            <Link className="btn primary" to="/tienda">
+              Volver a la tienda
+            </Link>
+          }
+        />
+      </div>
+    );
+  return children;
+}
+function NavigationEffects() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    document.title = pathname.startsWith("/admin")
+      ? "El Lirio · Administración"
+      : "El Lirio · Abarrotes & hogar";
+  }, [pathname]);
+  return null;
+}
+export default function App() {
+  return (
+    <>
+      <NavigationEffects />
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route element={<ShopLayout />}>
+            <Route index element={<Home />} />
+            <Route path="tienda" element={<Catalog />} />
+            <Route path="ofertas" element={<Catalog offers />} />
+            <Route path="producto/:id" element={<ProductDetail />} />
+            <Route
+              path="checkout"
+              element={
+                <Protected>
+                  <Checkout />
+                </Protected>
+              }
+            />
+            <Route
+              path="pedidos"
+              element={
+                <Protected>
+                  <MyOrders />
+                </Protected>
+              }
+            />
+            <Route
+              path="cuenta"
+              element={
+                <Protected>
+                  <Account />
+                </Protected>
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <div className="store-container">
+                  <Empty
+                    title="Parece que este pasillo no existe"
+                    text="Volvamos a algo que sí conoces."
+                    action={
+                      <Link className="btn primary" to="/">
+                        Volver al inicio
+                      </Link>
+                    }
+                  />
+                </div>
+              }
+            />
+          </Route>
+          <Route path="login" element={<Auth key="login" />} />
+          <Route
+            path="registro"
+            element={<Auth key="register" mode="register" />}
+          />
+          <Route
+            path="recuperar"
+            element={<Auth key="recover" mode="recover" />}
+          />
+          <Route
+            path="reset-password"
+            element={<Auth key="reset" mode="reset" />}
+          />
+          <Route
+            path="admin"
+            element={
+              <Protected admin>
+                <AdminLayout />
+              </Protected>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="inventario" element={<Inventory />} />
+            <Route path="ventas" element={<Orders sales />} />
+            <Route path="ventas/nueva" element={<PointOfSale />} />
+            <Route path="pedidos" element={<Orders />} />
+            <Route path="compras" element={<Purchases />} />
+            <Route path="proveedores" element={<Suppliers />} />
+            <Route path="clientes" element={<Customers />} />
+            <Route path="movimientos" element={<Movements />} />
+            <Route path="reportes" element={<Dashboard reports />} />
+            <Route path="configuracion" element={<Business />} />
+            <Route path="*" element={<Navigate to="/admin" replace />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </>
+  );
 }

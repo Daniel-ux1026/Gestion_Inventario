@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Table(name = "producto")
 @EqualsAndHashCode(exclude = {"categoria", "marca", "proveedor"})
 public class Producto {
+    @Column(name = "descuento_porcentaje")
+    private Integer descuentoPorcentaje = 0;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto")

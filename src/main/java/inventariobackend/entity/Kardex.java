@@ -24,7 +24,7 @@ public class Kardex {
     @Column(nullable = false)
     private LocalDateTime fecha;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 200, nullable = false)
     private String tipoMovimiento; // Ej: "Compra", "Venta", "Ajuste"
 
     @Column(nullable = false)

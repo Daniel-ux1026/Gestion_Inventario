@@ -7,6 +7,22 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "pedido")
 public class Pedido {
+    @Column(name = "idempotency_key", unique = true, length = 180)
+    private String idempotencyKey;
+    @Column(name = "request_hash", length = 64)
+    private String requestHash;
+    public String getRequestHash() { return requestHash; }
+    public void setRequestHash(String value) { requestHash = value; }
+    @Column(name = "telefono", length = 20)
+    private String telefono;
+    @Column(name = "direccion", length = 300)
+    private String direccion;
+    public String getIdempotencyKey() { return idempotencyKey; }
+    public void setIdempotencyKey(String value) { this.idempotencyKey = value; }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String value) { this.telefono = value; }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String value) { this.direccion = value; }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pedido")
