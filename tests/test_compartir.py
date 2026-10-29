@@ -2,7 +2,7 @@
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 import compartir
 
@@ -35,6 +35,24 @@ class SharingTests(unittest.TestCase):
         self.assertEqual([valid], compartir.TUNNEL_PATTERN.findall("| " + valid + " |"))
         self.assertEqual([], compartir.TUNNEL_PATTERN.findall(valid + ".ejemplo.com"))
         self.assertEqual([], compartir.TUNNEL_PATTERN.findall("http://ejemplo-tienda.trycloudflare.com"))
+
+    def test_temporary_cloudflare_failure_is_retried(self):
+        child = Mock()
+        child.poll.return_value = 1
+        with patch.object(compartir, "DATA", self.path), patch.object(compartir.iniciar, "check_stop"), \
+             patch.object(compartir.iniciar, "start", return_value=child) as start, \
+             patch.object(compartir, "tunnel_url", side_effect=[RuntimeError("timeout"), "https://nuevo.trycloudflare.com"]), \
+             patch.object(compartir.time, "sleep"):
+            _, url = compartir.open_tunnel("cloudflared", self.path / "config.yml")
+        self.assertEqual("https://nuevo.trycloudflare.com", url)
+        self.assertEqual(2, start.call_count)
+
+    def test_stop_request_is_not_retried(self):
+        with patch.object(compartir.iniciar, "check_stop", side_effect=compartir.StopRequested), \
+             patch.object(compartir.iniciar, "start") as start:
+            with self.assertRaises(compartir.StopRequested):
+                compartir.open_tunnel("cloudflared", self.path / "config.yml")
+            start.assert_not_called()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,18 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "lirio-tienda",
+	"main": "worker.js",
+	"account_id": "32e2caf545d53aad2a30a41071a41835",
+	"compatibility_date": "2026-10-23",
+	"workers_dev": true,
+	"preview_urls": false,
+	"vars": {
+		"PUBLIC_HOST": "lirio-tienda.daniel-olivos.workers.dev"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "LIRIO_ORIGIN",
+			"id": "e36fc214a51547e99d0dace8d7086fb2"
+		}
+	]
+}

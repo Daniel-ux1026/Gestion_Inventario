@@ -71,6 +71,10 @@ También puedes detenerlo desde una terminal con **python detener.py**. Detenerl
 
 La demostración usa **H2 local persistente**, independiente de MySQL, con 24 productos y pedidos de muestra. La interfaz identifica este entorno. Precios y operaciones de ejemplo no representan datos reales del negocio. Se conservan entre reinicios en **.data/lirio.mv.db**.
 
+## Dirección gratuita y fija
+
+Esta instalación tiene la dirección **https://lirio-tienda.daniel-olivos.workers.dev**. Abre **COMPARTIR_PROYECTO.bat** para conectar la tienda y **DETENER_PROYECTO.bat** para cerrarla conservando sus datos. La dirección permanece igual al reiniciar; cuando el equipo está apagado muestra mantenimiento. [Configuración y verificación](docs/DIRECCION_FIJA.md).
+
 ## Instalar con MySQL
 
 Para compartir una prueba gratuita por internet, inicia Docker Desktop y abre **COMPARTIR_PROYECTO.bat**. Genera un enlace HTTPS con Cloudflare Quick Tunnel y una base MySQL separada. El enlace queda en **.data/enlace_publico.txt** y tu acceso privado en **.data/ACCESO_ADMINISTRADOR.txt**. **DETENER_PROYECTO.bat** cierra la publicación y conserva sus datos. [Instrucciones y límites de la prueba](docs/CLOUDFLARE.md).

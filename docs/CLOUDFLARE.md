@@ -1,5 +1,7 @@
 # Pruebas gratuitas con Cloudflare Quick Tunnel
 
+Esta instalación también admite una [dirección gratuita y fija de workers.dev](DIRECCION_FIJA.md), que permanece igual al reiniciar el proyecto. Cuando **.data/direccion_fija.json** está configurado, **COMPARTIR_PROYECTO.bat** actualiza automáticamente su conexión con el túnel temporal.
+
 La tienda, la API Java y Streamlit comparten una dirección HTTPS temporal. La aplicación se ejecuta en Docker en tu equipo; Cloudflare conecta esa aplicación con las personas que abren el enlace. No necesitas comprar un dominio ni contratar alojamiento.
 
 ## Compartir con clientes

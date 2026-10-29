@@ -1,0 +1,7 @@
+{
+  "name": "lirio-direccion-fija",
+  "private": true,
+  "type": "module",
+  "scripts": {"test": "node --test"},
+  "devDependencies": {"wrangler": "4.155.0"}
+}

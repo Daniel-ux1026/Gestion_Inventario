@@ -15,6 +15,7 @@ import urllib.request
 import webbrowser
 
 import iniciar
+import direccion_fija
 from ejecucion import ProjectRun, StopRequested, write_json
 
 ROOT = iniciar.ROOT
@@ -97,6 +98,26 @@ def tunnel_url(child):
     raise RuntimeError("Cloudflare no genero un enlace a tiempo. Revisa .data/cloudflare.log.")
 
 
+def open_tunnel(binary, config):
+    for attempt in range(3):
+        iniciar.check_stop()
+        (DATA / "cloudflare.log").write_text("", encoding="utf-8")
+        child = iniciar.start("cloudflare", [binary, "tunnel", "--config", str(config), "--no-autoupdate",
+                              "--protocol", "http2", "--url", "http://127.0.0.1:8088", "--metrics", "127.0.0.1:0"], ROOT, os.environ.copy())
+        try:
+            return child, tunnel_url(child)
+        except RuntimeError:
+            if child.poll() is None:
+                child.terminate()
+                child.wait(timeout=10)
+            if attempt == 2:
+                raise
+            print("Cloudflare no respondio. Reintentando la conexion (" + str(attempt + 2) + "/3)...", flush=True)
+            for _ in range(3):
+                iniciar.check_stop()
+                time.sleep(1)
+
+
 def wait_ready(url, seconds=180):
     deadline = time.monotonic() + seconds
     while time.monotonic() < deadline:
@@ -113,6 +134,7 @@ def wait_ready(url, seconds=180):
 def main():
     parser = argparse.ArgumentParser(description="Comparte El Lirio con Cloudflare Quick Tunnel")
     parser.add_argument("--sin-abrir", action="store_true")
+    parser.add_argument("--reconstruir", action="store_true", help="Reconstruye las imagenes con los cambios locales")
     args = parser.parse_args()
     DATA.mkdir(exist_ok=True)
     docker = shutil.which("docker")
@@ -126,33 +148,36 @@ def main():
     public = None
     try:
         binary = cloudflared()
-        (DATA / "cloudflare.log").write_text("", encoding="utf-8")
         config = DATA / "cloudflare-quick.yml"
         config.write_text("{}\n", encoding="utf-8")
-        tunnel = iniciar.start("cloudflare", [binary, "tunnel", "--config", str(config), "--no-autoupdate",
-                               "--protocol", "http2", "--url", "http://127.0.0.1:8088", "--metrics", "127.0.0.1:0"], ROOT, os.environ.copy())
-        public = tunnel_url(tunnel)
+        tunnel, origin = open_tunnel(binary, config)
+        public = direccion_fija.fixed_url() or origin
         values = load_settings()
         values.update({"SPRING_PROFILES_ACTIVE": "preview", "LIRIO_SAMPLE_CATALOG": "true",
-                       "FRONTEND_URL": public, "CORS_ORIGINS": public + ",http://127.0.0.1:8088,http://localhost:8088",
+                       "FRONTEND_URL": public, "CORS_ORIGINS": public + "," + origin + ",http://127.0.0.1:8088,http://localhost:8088",
                        "WEB_BIND_ADDRESS": "127.0.0.1", "WEB_PORT": "8088"})
         save_settings(values)
         environment = os.environ.copy()
         environment.update(values)
         print("Preparando los contenedores de pruebas. La primera ejecucion puede tardar varios minutos...", flush=True)
         stack_started = True
-        build = iniciar.start("docker-build", compose + ["up", "--build", "-d"], ROOT, environment)
+        images = [PROJECT + "-" + name + ":latest" for name in ("backend", "web", "chatbot")]
+        existing = subprocess.run([docker, "image", "inspect", "--format", "{{.Id}}", *images],
+                                  capture_output=True, timeout=20).returncode == 0
+        build_flag = "--build" if args.reconstruir or not existing else "--no-build"
+        build = iniciar.start("docker-build", compose + ["up", build_flag, "-d"], ROOT, environment)
         while build.poll() is None:
             iniciar.check_stop()
             time.sleep(0.5)
         if build.returncode:
             raise RuntimeError("Docker no pudo iniciar la prueba. Revisa .data/docker-build.log.")
         wait_ready("http://127.0.0.1:8088")
+        public = direccion_fija.connect(origin, iniciar.ACTIVE_RUN.identifier)
         print("Servicios listos. Comprobando el acceso por HTTPS...", flush=True)
         wait_ready(public)
         LINK_FILE.write_text(public + "\n", encoding="utf-8")
         write_json(iniciar.ACTIVE_RUN.state, {"id": iniciar.ACTIVE_RUN.identifier, "pid": os.getpid(),
-                   "status": "running", "mode": "cloudflare", "url": public})
+                   "status": "running", "mode": "cloudflare", "url": public, "origin": origin})
         print("\nENLACE PARA TUS CLIENTES: " + public, flush=True)
         print("Acceso privado del administrador: .data/ACCESO_ADMINISTRADOR.txt", flush=True)
         print("Manten Docker y esta ventana abiertos. DETENER_PROYECTO.bat cierra la publicacion.", flush=True)
@@ -161,10 +186,15 @@ def main():
         while True:
             iniciar.check_stop()
             if tunnel.poll() is not None:
-                raise RuntimeError("El tunel se detuvo. Reinicia COMPARTIR_PROYECTO.bat para generar otro enlace.")
+                raise RuntimeError("El tunel se detuvo. Reinicia COMPARTIR_PROYECTO.bat para volver a conectar la tienda.")
             time.sleep(1)
     finally:
         errors = iniciar.stop()
+        if public:
+            try:
+                direccion_fija.disconnect(iniciar.ACTIVE_RUN.identifier)
+            except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
+                print("El enlace fijo mostrara mantenimiento hasta la proxima conexion: " + str(error), file=sys.stderr)
         if stack_started and environment is not None:
             try:
                 with (DATA / "docker-stop.log").open("ab") as output:
@@ -176,7 +206,7 @@ def main():
                 errors.append("Cierre de Docker: " + str(error))
         if public:
             LINK_FILE.write_text("PUBLICACION DETENIDA\nUltimo enlace: " + public +
-                                 "\nEjecuta COMPARTIR_PROYECTO.bat para generar otro enlace.\n", encoding="utf-8")
+                                 "\nEjecuta COMPARTIR_PROYECTO.bat para volver a publicar la tienda.\n", encoding="utf-8")
         iniciar.ACTIVE_RUN.finish(errors)
         if errors:
             raise RuntimeError("; ".join(errors))

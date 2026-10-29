@@ -21,6 +21,7 @@ jobs:
       - run: npm ci --no-fund
       - run: npm run build
       - run: npm audit --audit-level=high
+      - run: node --test ../cloudflare/worker.test.js
   chatbot:
     runs-on: ubuntu-latest
     steps:

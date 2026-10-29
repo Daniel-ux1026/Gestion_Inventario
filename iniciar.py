@@ -46,7 +46,8 @@ def locate_java():
 
 def ready(url):
     try:
-        with urllib.request.urlopen(url, timeout=2) as response:
+        request = urllib.request.Request(url, headers={"User-Agent": "ElLirioHealthCheck/1.0"})
+        with urllib.request.urlopen(request, timeout=2) as response:
             return response.status == 200
     except Exception:
         return False
