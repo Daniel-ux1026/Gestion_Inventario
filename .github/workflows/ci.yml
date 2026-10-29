@@ -29,3 +29,4 @@ jobs:
         with: {python-version: '3.12'}
       - run: pip install -r chatbot/requirements.txt
       - run: python -m unittest discover -s chatbot/tests -v
+      - run: python -m unittest discover -s tests -v

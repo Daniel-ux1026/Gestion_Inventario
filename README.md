@@ -57,7 +57,14 @@ Después de la primera instalación:
 
     python iniciar.py
 
-Abre **http://127.0.0.1:5173**. El script inicia backend, web y chatbot, guarda registros en **.data/** y los detiene con **Ctrl+C**. En Windows también puedes usar **INICIAR_LIRIO.cmd** después de instalar.
+Abre **http://127.0.0.1:5173**. El script inicia backend, web y chatbot, guarda registros en **.data/** y los detiene con **Ctrl+C**.
+
+En Windows, después de instalar:
+
+- **INICIAR_PROYECTO.bat**: inicia los tres servicios. **INICIAR_LIRIO.cmd** sigue funcionando como acceso compatible.
+- **DETENER_PROYECTO.bat**: solicita el cierre de esa ejecución, espera que terminen sus servicios y confirma el resultado. Puedes pulsarlo mientras el proyecto está iniciando o cuando ya está listo. No cierra aplicaciones por nombre ni por puerto.
+
+También puedes detenerlo desde una terminal con **python detener.py**. Detenerlo otra vez es seguro. Mantén abierta la ventana del iniciador hasta detener el proyecto; el cierre se coordina con ella.
 
 | Cuenta de demostración | Correo | Contraseña |
 |---|---|---|
@@ -105,7 +112,7 @@ Abre **http://localhost:8088**. Este modo no carga operaciones de ejemplo. Consu
 
 La última orden inicia servicios temporales, captura pantallas, prueba escritorio y móvil y los detiene. Las pruebas Java usan una base en memoria aislada. Las pruebas de navegador crean registros en la demostración local.
 
-**Resultados:** 19 pruebas Java, 12 de navegador y 8 de chatbot aprobadas; compilación correcta y 0 vulnerabilidades npm. Las capturas provienen de la aplicación funcionando. [Resultados y alcance](docs/VALIDACION.md).
+**Resultados:** 19 pruebas Java, 12 de navegador, 8 de chatbot y 4 de coordinación de inicio/cierre aprobadas; compilación correcta y 0 vulnerabilidades npm. También se comprobó el ciclo real de los accesos de Windows. Las capturas provienen de la aplicación funcionando. [Resultados y alcance](docs/VALIDACION.md).
 
 ## Estructura
 

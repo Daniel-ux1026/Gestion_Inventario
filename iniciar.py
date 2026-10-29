@@ -1,7 +1,6 @@
 """Run the local demonstration with one command. Python 3.11+, Node 20.19+ and Java 21."""
 from __future__ import annotations
 import argparse
-import json
 import os
 from pathlib import Path
 import shutil
@@ -10,12 +9,19 @@ import sys
 import time
 import urllib.request
 import webbrowser
+from ejecucion import ProjectRun, StopRequested
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / ".data"
 FRONT = ROOT / "el-lirio-frontend"
 WINDOWS = os.name == "nt"
 CHILDREN = []
+ACTIVE_RUN = None
+
+
+def check_stop():
+    if ACTIVE_RUN is not None:
+        ACTIVE_RUN.check_stop()
 
 def run(command, cwd=ROOT, env=None):
     subprocess.run(command, cwd=cwd, env=env, check=True, shell=False)
@@ -46,6 +52,7 @@ def ready(url):
         return False
 
 def start(name, command, cwd, env):
+    check_stop()
     log = (DATA / (name + ".log")).open("ab")
     flags = subprocess.CREATE_NO_WINDOW | subprocess.CREATE_NEW_PROCESS_GROUP if WINDOWS else 0
     child = subprocess.Popen(command, cwd=cwd, env=env, stdout=log, stderr=subprocess.STDOUT, creationflags=flags)
@@ -55,6 +62,7 @@ def start(name, command, cwd, env):
 def wait_service(name, url, child, seconds=75):
     deadline = time.monotonic() + seconds
     while time.monotonic() < deadline:
+        check_stop()
         if child.poll() is not None:
             raise RuntimeError(name + " no pudo iniciar. Revisa .data/" + name + ".log")
         if ready(url):
@@ -63,15 +71,24 @@ def wait_service(name, url, child, seconds=75):
     raise RuntimeError(name + " no respondió a tiempo. Revisa su registro en .data/.")
 
 def stop():
+    errors = []
     for _, child, log in reversed(CHILDREN):
-        if child.poll() is None:
-            if WINDOWS:
-                subprocess.run(["taskkill", "/PID", str(child.pid), "/T", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            else:
-                child.terminate()
-        log.close()
+        try:
+            if child.poll() is None:
+                if WINDOWS:
+                    subprocess.run(["taskkill", "/PID", str(child.pid), "/T", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+                else:
+                    child.terminate()
+                child.wait(timeout=10)
+        except (OSError, subprocess.SubprocessError) as error:
+            errors.append("PID " + str(child.pid) + ": " + str(error))
+        finally:
+            log.close()
+    CHILDREN.clear()
+    return errors
 
 def main():
+    global ACTIVE_RUN
     parser = argparse.ArgumentParser(description="Inicia la demostración local de El Lirio")
     parser.add_argument("--instalar", action="store_true", help="Instala dependencias y construye el backend")
     parser.add_argument("--sin-abrir", action="store_true", help="No abre una ventana de navegador")
@@ -104,6 +121,7 @@ def main():
             run(["sh", str(ROOT / "mvnw"), "-B", "package"], env=env)
     if not jar.is_file() or not venv_python.is_file() or not (FRONT / "node_modules/vite").exists():
         raise RuntimeError("Primera ejecución: python iniciar.py --instalar")
+    ACTIVE_RUN = ProjectRun().acquire()
     endpoints = [("backend", "http://127.0.0.1:8080/api/v1/health"), ("web", "http://127.0.0.1:5173"), ("chatbot", "http://127.0.0.1:8501/_stcore/health")]
     if any(ready(url) for _, url in endpoints):
         raise RuntimeError("Uno de los puertos 8080, 5173 o 8501 ya está en uso. Cierra tu ejecución anterior antes de iniciar otra.")
@@ -116,10 +134,11 @@ def main():
     print("El Lirio está listo: http://127.0.0.1:5173")
     print("Administrador: admin@lirio.local / LirioDemo2026!")
     print("Cliente: cliente@lirio.local / ClienteDemo2026!")
-    print("Demostración aislada. Registros: .data/. Pulsa Ctrl+C para detener.")
+    print("Demostración aislada. Registros: .data/. Usa DETENER_PROYECTO.bat o pulsa Ctrl+C para detener.")
     if not args.sin_abrir:
         webbrowser.open("http://127.0.0.1:5173")
     while True:
+        check_stop()
         for name, child, _ in CHILDREN:
             if child.poll() is not None:
                 raise RuntimeError(name + " se detuvo. Revisa .data/" + name + ".log")
@@ -130,8 +149,15 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print("\nDeteniendo El Lirio…")
+    except StopRequested:
+        print("Deteniendo El Lirio desde DETENER_PROYECTO.bat…")
     except (RuntimeError, subprocess.SubprocessError, OSError) as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)
     finally:
-        stop()
+        errors = stop()
+        if ACTIVE_RUN is not None:
+            ACTIVE_RUN.finish(errors)
+        if errors:
+            print("No se pudo completar el cierre: " + "; ".join(errors), file=sys.stderr)
+            sys.exit(1)
