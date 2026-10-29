@@ -131,7 +131,7 @@ La última orden inicia servicios temporales, captura pantallas, prueba escritor
 
 ## Datos del negocio
 
-Contacto solicitado: **948656772**. La dirección, horarios y datos de pago deben confirmarse con el negocio; no se publica un QR ni una cuenta bancaria sin verificar. Los pagos digitales se revisan manualmente y el efectivo se confirma al recoger.
+La dirección, horarios y datos de pago deben confirmarse con el negocio; no se publica un QR ni una cuenta bancaria sin verificar. Los pagos digitales se revisan manualmente y el efectivo se confirma al recoger.
 
 Los documentos son registros operativos. La aplicación no realiza cargos, transferencias, facturación electrónica ni devoluciones bancarias.
 
