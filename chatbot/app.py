@@ -9,13 +9,22 @@ theme_mode = "dark" if dark_theme else "light"
 theme_background = "#171215" if dark_theme else "#ffffff"
 theme_surface = "#2c2026" if dark_theme else "#fff0f2"
 theme_text = "#f7eff2" if dark_theme else "#302128"
-st.markdown(f"<style>:root{{color-scheme:{theme_mode};--lirio-mode:{theme_mode};--lirio-bg:{theme_background};--lirio-surface:{theme_surface};--lirio-ink:{theme_text};}}</style>", unsafe_allow_html=True)
+theme_muted = "#c4afb7" if dark_theme else "#75636b"
+theme_link = "#ff9ba8" if dark_theme else "#b31b2b"
+st.markdown(f"<style>:root{{color-scheme:{theme_mode};--lirio-mode:{theme_mode};--lirio-bg:{theme_background};--lirio-surface:{theme_surface};--lirio-ink:{theme_text};--lirio-muted:{theme_muted};--lirio-link:{theme_link};}}</style>", unsafe_allow_html=True)
 st.markdown("""
 <style>
 .stApp {background:var(--lirio-bg);color:var(--lirio-ink);color-scheme:var(--lirio-mode);}
 .block-container {padding:2rem 1.4rem 6rem;max-width:740px;}
 h1 {font-size:2.2rem!important;letter-spacing:-.05em;font-weight:550!important;color:var(--lirio-ink);}
 .stApp :is(p,h2,h3,label) {color:var(--lirio-ink);}
+.stApp [data-testid="stMarkdownContainer"] {color:var(--lirio-ink);}
+.stApp [data-testid="stMarkdownContainer"] :is(p,ul,ol,li,strong,em,span,blockquote,td,th) {color:inherit;}
+.stApp [data-testid="stMarkdownContainer"] ::marker {color:var(--lirio-ink);}
+.stApp a, .stApp [data-testid="stMarkdownContainer"] a {color:var(--lirio-link);text-decoration:underline;text-underline-offset:3px;}
+.stApp :is(code,pre) {color:var(--lirio-ink);background:var(--lirio-surface);}
+.stApp :is(th,td) {color:var(--lirio-ink);border-color:color-mix(in srgb,var(--lirio-ink) 20%,transparent);}
+.stApp [data-testid="stCaptionContainer"], .stApp [data-testid="stCaptionContainer"] p {color:var(--lirio-muted);opacity:1;}
 [data-testid="stChatMessage"] {border:1px solid color-mix(in srgb,var(--lirio-ink) 15%,transparent);border-radius:18px;background:var(--lirio-surface);}
 .stApp button {border-radius:12px;border:1px solid color-mix(in srgb,var(--lirio-ink) 20%,transparent);background:var(--lirio-bg);font-size:.8rem;min-height:44px;color:var(--lirio-ink);}
 .stApp button:hover {border-color:#e62b3d;background:color-mix(in srgb,#e62b3d 12%,var(--lirio-bg));color:var(--lirio-ink);}

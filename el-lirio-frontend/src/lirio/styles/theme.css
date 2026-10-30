@@ -283,6 +283,16 @@ body,
   mix-blend-mode: normal;
 }
 
+:root[data-theme="dark"] .detail-image {
+  background: var(--product-surface);
+}
+
+:root[data-theme="dark"] :is(.detail-image img, .cart-item > img, .order-thumbs img, .order-lines img, .checkout-items img, .pos-products img) {
+  mix-blend-mode: normal;
+  background: var(--product-surface);
+  border-radius: 8px;
+}
+
 :root[data-theme="dark"] .hero-product {
   mix-blend-mode: normal;
   background: var(--product-surface);

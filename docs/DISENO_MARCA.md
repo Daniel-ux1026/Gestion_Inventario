@@ -16,3 +16,13 @@ La actualización desplegada reconstruye solo web y chatbot. El backend, las cre
 
 1. Abre la tienda y pulsa la luna para activar el modo oscuro o el sol para volver al modo claro.
 2. En el equipo servidor, usa **COMPARTIR_PROYECTO.bat** con Docker abierto para publicar, y **DETENER_PROYECTO.bat** para cerrar.
+
+## Revisión del contraste en modo oscuro
+
+Se corrige la herencia del tema claro en las listas Markdown del asistente. Listas, texto resaltado, enlaces, tablas y bloques de código siguen la paleta activa. Las notas pequeñas usan un color legible y opacidad completa. Las miniaturas de detalle, bolsa, pedidos, checkout y punto de venta conservan un fondo claro para evitar que la mezcla de colores las oscurezca.
+
+Se revisaron 31 vistas y estados con una auditoría de contraste: tienda, catálogo, ofertas, detalle, acceso, registro, recuperación, cuenta, pedidos, checkout, administración, tablas, formularios nuevos, notificaciones y móvil. La comprobación final no detectó infracciones automáticas de contraste. Los fondos con gradientes y los gráficos que requieren inspección visual también se revisaron; la auditoría no constituye una certificación completa de accesibilidad.
+
+Las cuatro pruebas de **e2e/dark-contrast.spec.js** miden el contraste real de las listas de productos y las notas del asistente en claro y oscuro, incluyendo la opacidad de sus contenedores. También comprueban textos de catálogo, bolsa y formularios en escritorio y móvil, con un mínimo de 4,5:1 para el texto probado.
+
+![Respuesta de productos legible en modo oscuro](images/chatbot-oscuro.png)
