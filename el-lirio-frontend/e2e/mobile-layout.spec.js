@@ -69,10 +69,11 @@ for (const theme of ["light", "dark"]) {
       await page.locator('input[type="file"]').setInputFiles({
         name,
         mimeType: "image/png",
-        buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=", "base64"),
+        buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGN4pm37HwAFlwJOwwTb6AAAAABJRU5ErkJggg==", "base64"),
       });
       await expect(page.locator(".upload-label > strong")).toHaveText(name);
       await expect(page.locator(".receipt-preview")).toBeVisible();
+      await expect(page.locator(".receipt-preview")).toHaveJSProperty("naturalWidth", 1);
       await fits(page);
       const afterUpload = await payment.boundingBox();
       expect(Math.abs(afterUpload.width - original.width)).toBeLessThan(1);
