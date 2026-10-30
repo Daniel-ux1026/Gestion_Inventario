@@ -157,20 +157,6 @@ body,
   border-color: var(--border);
 }
 
-.category-card {
-  border-color: var(--border);
-}
-
-.category-card.rice,
-.category-card.coffee {
-  background: var(--accent-soft);
-}
-
-.category-card.can,
-.category-card.clean {
-  background: var(--surface-soft);
-}
-
 .product-visual,
 .detail-visual,
 .cart-item > img,

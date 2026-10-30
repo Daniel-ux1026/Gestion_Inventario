@@ -26,3 +26,13 @@ Se revisaron 31 vistas y estados con una auditoría de contraste: tienda, catál
 Las cuatro pruebas de **e2e/dark-contrast.spec.js** miden el contraste real de las listas de productos y las notas del asistente en claro y oscuro, incluyendo la opacidad de sus contenedores. También comprueban textos de catálogo, bolsa y formularios en escritorio y móvil, con un mínimo de 4,5:1 para el texto probado.
 
 ![Respuesta de productos legible en modo oscuro](images/chatbot-oscuro.png)
+
+## Categorías fáciles de explorar
+
+Las categorías de inicio usan iconos, títulos de mayor tamaño, descripciones completas y una acción **Ver productos**. Se retiraron los números y círculos decorativos que podían tapar el texto. El contenido crece con sus líneas, sin alturas rígidas ni recortes.
+
+La distribución tiene cuatro columnas en escritorio, dos en pantallas intermedias y filas horizontales en móvil. Se comprobaron 320, 390, 768, 1024 y 1440 píxeles en ambos modos, incluyendo contraste, ausencia de solapamientos y navegación a los cuatro catálogos filtrados. El acceso al asistente conserva su etiqueta accesible y usa un botón compacto en móvil.
+
+![Categorías en modo oscuro](images/categorias-oscuro.png)
+
+<img src="images/categorias-movil.png" width="350" alt="Categorías con textos completos en móvil">

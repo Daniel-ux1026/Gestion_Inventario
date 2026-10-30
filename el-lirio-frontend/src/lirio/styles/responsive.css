@@ -1,3 +1,21 @@
+@media (max-width: 560px) {
+  .chat-fab {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
+    border-radius: 50%;
+    right: 16px;
+    bottom: 16px;
+  }
+  .chat-fab > span,
+  .chat-fab > i {
+    display: none;
+  }
+}
+
 @media (min-width: 1600px) {
   .store-container {
     padding-left: 70px;
@@ -148,13 +166,7 @@
   .hero-actions .text-link {
     font-size: 10px;
   }
-  .category-card {
-    padding: 17px;
-    min-height: 160px;
-  }
-  .category-card h3 {
-    font-size: 16px;
-  }
+
   .product-grid {
     gap: 15px;
   }
@@ -385,13 +397,7 @@
   .trust-bar small {
     font-size: 8px;
   }
-  .category-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .category-card {
-    min-height: 140px;
-    gap: 22px;
-  }
+
   .product-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -680,28 +686,9 @@
   .store-container > section {
     margin-bottom: 43px;
   }
-  .category-cards {
-    gap: 11px;
-  }
-  .category-card {
-    padding: 15px;
-    min-height: 137px;
-  }
-  .category-card > span {
-    font-size: 9px;
-  }
-  .category-card h3 {
-    font-size: 16px;
-  }
-  .category-card p {
-    font-size: 9px;
-  }
-  .category-card > svg {
-    width: 25px;
-    height: 25px;
-    right: 12px;
-    top: 12px;
-  }
+
+
+
   .product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;

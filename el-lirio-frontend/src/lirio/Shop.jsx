@@ -39,6 +39,7 @@ import {
 } from "./UI";
 import { useStore } from "./StoreContext";
 import { useTheme } from "./theme";
+import HomeCategories from "./HomeCategories";
 import { api, CHAT_URL, money, imageUrl, date } from "./api";
 
 export function ShopLayout() {
@@ -383,35 +384,7 @@ export function Home() {
           </span>
         </div>
       </div>
-      <section className="home-categories">
-        <SectionTitle
-          eyebrow="CADA COSA EN SU LUGAR"
-          title="¿Qué llevamos hoy?"
-          link="Explorar todo"
-          to="/tienda"
-        />
-        <div className="category-cards">
-          {[
-            ["Abarrotes", "Lo esencial de tu cocina", "01", "rice"],
-            ["Conservas", "Siempre a la mano", "02", "can"],
-            ["Café y desayuno", "Empieza con algo bueno", "03", "coffee"],
-            ["Limpieza", "Un hogar que se siente bien", "04", "clean"],
-          ].map(([name, desc, num, cls]) => (
-            <Link
-              to={"/tienda?categoria=" + encodeURIComponent(name)}
-              className={"category-card " + cls}
-              key={name}
-            >
-              <span>{num}</span>
-              <div>
-                <h3>{name}</h3>
-                <p>{desc}</p>
-              </div>
-              <FiArrowUpRight />
-            </Link>
-          ))}
-        </div>
-      </section>
+      <HomeCategories />
       <section>
         <SectionTitle
           eyebrow="SIEMPRE UNA BUENA ELECCIÓN"
