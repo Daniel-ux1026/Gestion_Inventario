@@ -30,6 +30,7 @@ h1 {font-size:2.2rem!important;letter-spacing:-.05em;font-weight:550!important;c
 .stApp button:hover {border-color:#e62b3d;background:color-mix(in srgb,#e62b3d 12%,var(--lirio-bg));color:var(--lirio-ink);}
 [data-testid="stChatInput"], [data-testid="stChatInput"] > div {border-radius:14px;background:var(--lirio-surface);}
 .stApp textarea {color:var(--lirio-ink);background:var(--lirio-surface);}
+.stApp [data-testid="stChatInput"] textarea {font-size:16px;}
 .stApp textarea::placeholder {color:var(--lirio-ink);opacity:.65;}
 [data-testid="stBottom"], [data-testid="stBottom"] > div, [data-testid="stBottomBlockContainer"] {background:var(--lirio-bg);}
 .lirio-label {font-size:.65rem;letter-spacing:.18em;color:var(--lirio-ink);font-weight:600;margin-bottom:12px;}

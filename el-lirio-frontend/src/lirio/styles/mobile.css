@@ -1,0 +1,202 @@
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* A file control's intrinsic width must never determine the checkout columns. */
+.checkout-grid {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+}
+.checkout-fields,
+.checkout-fields .form-panel,
+.checkout-summary,
+.form-grid > *,
+.delivery-info > div,
+.purchase-line > label,
+.product-form-top > div {
+  min-width: 0;
+}
+.checkout-fields .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.upload-label {
+  min-width: 0;
+  max-width: 100%;
+}
+.upload-label > strong {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.upload-label input[type="file"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.upload-label input::file-selector-button {
+  max-width: 100%;
+  min-height: 44px;
+  margin-right: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.checkout-items > div > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.checkout-items img,
+.checkout-items b {
+  flex-shrink: 0;
+}
+.checkout-items b {
+  white-space: nowrap;
+}
+.delivery-info {
+  overflow-wrap: anywhere;
+}
+.payment-options {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.payment-options > label {
+  position: relative;
+  min-width: 0;
+  min-height: 56px;
+  padding: 14px 12px;
+  font-size: 13px;
+  text-align: center;
+}
+.payment-options > label > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+/* Keep keyboard focus on the card without an invisible radio over its text. */
+.payment-options input {
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.payment-options > label > svg {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 12px;
+}
+.payment-options .selected {
+  border-color: var(--primary);
+}
+.purchase-line {
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 0.8fr) minmax(0, 1fr) auto;
+}
+.product-form-top > img {
+  flex-shrink: 0;
+}
+.product-form-top select {
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .checkout-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .checkout-summary {
+    position: static;
+  }
+  .shop-shell:has(.checkout-page) .chat-fab {
+    display: none;
+  }
+  /* 16px avoids Safari zooming the page when a form field receives focus. */
+  :root :is(.shop-shell, .auth-shell, .admin-shell) :is(input, select, textarea) {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .checkout-fields .form-panel,
+  .checkout-summary {
+    padding: 20px;
+  }
+  .checkout-fields .form-grid,
+  .auth-card .form-grid,
+  .modal-glass .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .payment-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .upload-label {
+    padding: 18px 14px;
+  }
+  .checkout-fields h2 {
+    gap: 9px;
+    font-size: 18px;
+  }
+  .checkout-items > div {
+    gap: 9px;
+  }
+  .checkout-items strong,
+  .checkout-items b,
+  .summary-row {
+    font-size: 13px;
+  }
+  .checkout-items small,
+  .secure-note,
+  .delivery-info,
+  .upload-label > span {
+    font-size: 12px;
+  }
+  .delivery-info span {
+    font-size: 11px;
+  }
+  .checkout-summary > .btn {
+    min-height: 48px;
+    white-space: normal;
+  }
+  .checkout-summary .summary-row,
+  .checkout-summary .cart-total {
+    gap: 12px;
+  }
+  .purchase-line {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px;
+    gap: 12px 8px;
+  }
+  .purchase-line > label:first-child {
+    grid-column: 1 / -1;
+  }
+  .purchase-line label {
+    font-size: 12px;
+  }
+  .purchase-line :is(input, select) {
+    width: 100%;
+    min-height: 44px;
+  }
+  .purchase-line .icon-btn {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    margin-bottom: 0;
+  }
+  .admin-breadcrumb {
+    min-width: 0;
+  }
+  .admin-breadcrumb > strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .topbar-actions {
+    flex-shrink: 0;
+  }
+}

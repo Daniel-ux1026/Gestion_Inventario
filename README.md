@@ -146,3 +146,13 @@ La dirección, horarios y datos de pago deben confirmarse con el negocio; no se 
 Los documentos son registros operativos. La aplicación no realiza cargos, transferencias, facturación electrónica ni devoluciones bancarias.
 
 **Antes de publicar:** cambia las credenciales expuestas en el historial del avance original y revisa las notas de soporte y validación de MySQL en [Despliegue](docs/DESPLIEGUE.md).
+
+
+## Experiencia móvil
+
+Pago adaptable para pantallas pequeñas, con comprobantes que respetan el ancho del formulario y campos cómodos para Safari. Incluye comprobaciones en modo claro y oscuro y pruebas de regresión con Chromium y WebKit.
+
+<img src="docs/images/pago-movil-claro.png" width="320" alt="Pago en móvil, modo claro" />
+<img src="docs/images/pago-movil-oscuro.png" width="320" alt="Pago en móvil, modo oscuro" />
+
+Consulta [la validación móvil y cómo ejecutar sus pruebas](docs/VALIDACION_MOVIL.md).
