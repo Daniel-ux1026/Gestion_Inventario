@@ -25,6 +25,7 @@ import {
 import { Line, Doughnut } from "react-chartjs-2";
 import useApi from "./useApi";
 import { useStore } from "./StoreContext";
+import { useTheme } from "./theme";
 import { money, date, api, exportCsv, imageUrl } from "./api";
 import { PageHeading, Loading, ErrorBox, Empty, Status } from "./UI";
 ChartJS.register(
@@ -93,6 +94,9 @@ export function Stats({ data: d }) {
   );
 }
 export function SalesChart({ data: d }) {
+  const { theme } = useTheme();
+  const lineColor = theme === "dark" ? "#ff8a97" : "#c71e2d";
+  const tickColor = theme === "dark" ? "#c4afb7" : "#75636b";
   const labels = d.grafico.map((p) =>
     new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short" }).format(
       new Date(p.fecha + "T12:00:00"),
@@ -107,25 +111,25 @@ export function SalesChart({ data: d }) {
             {
               label: "Ventas aprobadas",
               data: d.grafico.map((p) => Number(p.total)),
-              borderColor: "#78927a",
+              borderColor: lineColor,
               borderWidth: 2.5,
               pointRadius: d.grafico.length > 30 ? 0 : 3,
-              pointBackgroundColor: "#78927a",
+              pointBackgroundColor: lineColor,
               pointBorderColor: "#fff",
               pointBorderWidth: 2,
               tension: 0.4,
               fill: true,
               backgroundColor: (context) => {
                 const chart = context.chart;
-                if (!chart.chartArea) return "rgba(120,146,122,.1)";
+                if (!chart.chartArea) return "rgba(199,30,45,.1)";
                 const gradient = chart.ctx.createLinearGradient(
                   0,
                   0,
                   0,
                   chart.height,
                 );
-                gradient.addColorStop(0, "rgba(120,146,122,.22)");
-                gradient.addColorStop(1, "rgba(120,146,122,0)");
+                gradient.addColorStop(0, "rgba(199,30,45,.24)");
+                gradient.addColorStop(1, "rgba(199,30,45,0)");
                 return gradient;
               },
             },
@@ -137,7 +141,7 @@ export function SalesChart({ data: d }) {
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: "#263d32",
+              backgroundColor: "#571923",
               padding: 12,
               displayColors: false,
               callbacks: { label: (c) => money(c.parsed.y) },
@@ -147,14 +151,14 @@ export function SalesChart({ data: d }) {
             x: {
               grid: { display: false },
               border: { display: false },
-              ticks: { color: "#89857e", font: { size: 10 }, maxTicksLimit: 7 },
+              ticks: { color: tickColor, font: { size: 10 }, maxTicksLimit: 7 },
             },
             y: {
               beginAtZero: true,
               border: { display: false },
-              grid: { color: "rgba(120,112,96,.08)" },
+              grid: { color: theme === "dark" ? "#4e3842" : "#f0e5e8" },
               ticks: {
-                color: "#89857e",
+                color: tickColor,
                 font: { size: 10 },
                 maxTicksLimit: 5,
                 callback: (v) => "S/ " + v,
@@ -169,7 +173,7 @@ export function SalesChart({ data: d }) {
 export function CategoryChart({ data: d }) {
   const labels = Object.keys(d.categorias),
     values = Object.values(d.categorias),
-    colors = ["#78927a", "#d2b292", "#b0a5b8", "#ddc77c", "#a6bac0"];
+    colors = ["#c71e2d", "#f16a78", "#b77b8a", "#7e4657", "#e8afb8"];
   if (!labels.length)
     return (
       <Empty

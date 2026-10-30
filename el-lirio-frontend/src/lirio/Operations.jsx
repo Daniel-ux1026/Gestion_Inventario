@@ -13,7 +13,7 @@ import {
   FiX,
   FiTrash2,
 } from "react-icons/fi";
-import { api, money, date, exportCsv, cents } from "./api";
+import { api, money, date, exportCsv } from "./api";
 import useApi from "./useApi";
 import { useStore } from "./StoreContext";
 import { PageHeading, Modal, Loading, ErrorBox, Empty, Status } from "./UI";

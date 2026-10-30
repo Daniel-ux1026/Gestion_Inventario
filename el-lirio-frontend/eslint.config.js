@@ -23,7 +23,12 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]', argsIgnorePattern: '^[A-Z_]' }],
+      'react-refresh/only-export-components': ['error', { allowConstantExport: true, allowExportNames: ['useStore', 'downloadSales'] }],
     },
+  },
+  {
+    files: ['e2e/**/*.js', 'playwright.config.js', 'vite.config.js'],
+    languageOptions: { globals: globals.node },
   },
 ])

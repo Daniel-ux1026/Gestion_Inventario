@@ -108,12 +108,12 @@ test("dashboard ranges, theme and mobile navigation", async ({ page }) => {
   await expect(page.getByText("El ritmo de tus ventas")).toBeVisible();
   await page.getByRole("button", { name: "30 días", exact: true }).click();
   await expect(page.locator(".segmented button.active")).toHaveText("30 días");
-  await page.getByRole("button", { name: "Activar tema oscuro" }).click();
+  await page.getByRole("button", { name: "Activar modo oscuro" }).click();
   await expect(page.locator(".admin-shell")).toHaveAttribute(
     "data-theme",
     "dark",
   );
-  await page.getByRole("button", { name: "Activar tema claro" }).click();
+  await page.getByRole("button", { name: "Activar modo claro" }).click();
   if (await page.getByRole("button", { name: "Abrir menú" }).isVisible())
     await page.getByRole("button", { name: "Abrir menú" }).click();
   await page

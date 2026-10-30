@@ -3,18 +3,28 @@ import os
 import streamlit as st
 from knowledge import QUESTIONS, CONTACT, answer, catalog, business
 
-st.set_page_config(page_title="Asistente Lirio", page_icon="🌿", layout="centered")
+st.set_page_config(page_title="Asistente Lirio", page_icon="🌺", layout="centered")
+dark_theme = st.query_params.get("lirio_theme", "light") == "dark"
+theme_mode = "dark" if dark_theme else "light"
+theme_background = "#171215" if dark_theme else "#ffffff"
+theme_surface = "#2c2026" if dark_theme else "#fff0f2"
+theme_text = "#f7eff2" if dark_theme else "#302128"
+st.markdown(f"<style>:root{{color-scheme:{theme_mode};--lirio-mode:{theme_mode};--lirio-bg:{theme_background};--lirio-surface:{theme_surface};--lirio-ink:{theme_text};}}</style>", unsafe_allow_html=True)
 st.markdown("""
 <style>
-.stApp {background:linear-gradient(135deg,#f7f6ef,#e9eddf);}
+.stApp {background:var(--lirio-bg);color:var(--lirio-ink);color-scheme:var(--lirio-mode);}
 .block-container {padding:2rem 1.4rem 6rem;max-width:740px;}
-h1 {font-size:2.2rem!important;letter-spacing:-.05em;font-weight:550!important;color:#405735;}
-[data-testid="stChatMessage"] {border:1px solid #ffffffb3;border-radius:18px;background:#ffffff70;}
-.stButton button {border-radius:12px;border:1px solid #d4dec8;background:#f7f8f0;font-size:.8rem;min-height:44px;color:#5a7049;}
-.stButton button:hover {border-color:#8ca077;background:#e8efdc;color:#415936;}
-[data-testid="stChatInput"] {border-radius:14px;}
-.lirio-label {font-size:.65rem;letter-spacing:.18em;color:#8b9979;font-weight:600;margin-bottom:12px;}
-.lirio-contact {padding:12px 16px;border:1px solid #dbe3ce;border-radius:14px;background:#edf2e5;color:#75866a;font-size:.78rem;margin:15px 0 22px;}
+h1 {font-size:2.2rem!important;letter-spacing:-.05em;font-weight:550!important;color:var(--lirio-ink);}
+.stApp :is(p,h2,h3,label) {color:var(--lirio-ink);}
+[data-testid="stChatMessage"] {border:1px solid color-mix(in srgb,var(--lirio-ink) 15%,transparent);border-radius:18px;background:var(--lirio-surface);}
+.stApp button {border-radius:12px;border:1px solid color-mix(in srgb,var(--lirio-ink) 20%,transparent);background:var(--lirio-bg);font-size:.8rem;min-height:44px;color:var(--lirio-ink);}
+.stApp button:hover {border-color:#e62b3d;background:color-mix(in srgb,#e62b3d 12%,var(--lirio-bg));color:var(--lirio-ink);}
+[data-testid="stChatInput"], [data-testid="stChatInput"] > div {border-radius:14px;background:var(--lirio-surface);}
+.stApp textarea {color:var(--lirio-ink);background:var(--lirio-surface);}
+.stApp textarea::placeholder {color:var(--lirio-ink);opacity:.65;}
+[data-testid="stBottom"], [data-testid="stBottom"] > div, [data-testid="stBottomBlockContainer"] {background:var(--lirio-bg);}
+.lirio-label {font-size:.65rem;letter-spacing:.18em;color:var(--lirio-ink);font-weight:600;margin-bottom:12px;}
+.lirio-contact {padding:12px 16px;border:1px solid color-mix(in srgb,var(--lirio-ink) 15%,transparent);border-radius:14px;background:var(--lirio-surface);color:var(--lirio-ink);font-size:.78rem;margin:15px 0 22px;}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
 """, unsafe_allow_html=True)

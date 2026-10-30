@@ -2,9 +2,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/lirio.svg" />
+  <link rel="icon" type="image/jpeg" href="/lirio-logo.jpg" />
+  <link rel="apple-touch-icon" href="/lirio-logo.jpg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#eee9e1" />
+  <meta name="theme-color" content="#ffffff" />
+  <script>
+    (() => {
+      let theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      try {
+        const saved = localStorage.getItem('lirio.theme');
+        if (saved === 'light' || saved === 'dark') theme = saved;
+      } catch { /* Theme remains available without persistent storage. */ }
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+      document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#171215' : '#ffffff';
+    })();
+  </script>
   <meta name="description" content="El Lirio de los Valles. Tus abarrotes favoritos, una compra más sencilla. Tienda y gestión de inventario." />
   <title>El Lirio · Abarrotes & hogar</title>
 </head>

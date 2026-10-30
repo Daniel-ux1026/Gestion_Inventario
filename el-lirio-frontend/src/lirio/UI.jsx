@@ -7,10 +7,13 @@ import {
   FiPackage,
   FiRefreshCw,
   FiHeart,
+  FiMoon,
+  FiSun,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { imageUrl, money } from "./api";
 import { useStore } from "./StoreContext";
+import { useTheme } from "./theme";
 
 export function Flower({ className = "" }) {
   return (
@@ -31,12 +34,17 @@ export function Flower({ className = "" }) {
 export function Logo() {
   return (
     <Link to="/" className="brand" aria-label="El Lirio, inicio">
-      <Flower />
-      <span>
-        lirio<span className="brand-dot">.</span>
-        <small>ABARROTES & HOGAR</small>
-      </span>
+      <img className="brand-logo" src="/lirio-logo.jpg" alt="Lirio Inversiones" width="76" height="76" />
     </Link>
+  );
+}
+export function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const label = theme === "dark" ? "Activar modo claro" : "Activar modo oscuro";
+  return (
+    <button type="button" className="icon-btn theme-toggle" aria-label={label} aria-pressed={theme === "dark"} title={label} onClick={toggleTheme}>
+      {theme === "dark" ? <FiSun /> : <FiMoon />}
+    </button>
   );
 }
 export function Modal({

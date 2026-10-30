@@ -1,0 +1,333 @@
+:root {
+  color-scheme: light;
+  --brand: #ed282f;
+  --ink: #302128;
+  --muted: #75636b;
+  --primary: #c71e2d;
+  --action: #c71e2d;
+  --action-hover: #a91625;
+  --on-action: #ffffff;
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --surface-soft: #fff6f6;
+  --accent-soft: #ffe9eb;
+  --accent-wash: #ffd3d8;
+  --glass: rgb(255 255 255 / 0.8);
+  --field: #fffafa;
+  --border: #eadade;
+  --line: #f0e5e8;
+  --shadow-rgb: 83 20 38;
+  --product-surface: #faf4f4;
+  --hero-flower: #f5a7af;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #f7eff2;
+  --muted: #c4afb7;
+  --primary: #ff8a97;
+  --action: #c71e36;
+  --action-hover: #ac172d;
+  --paper: #171215;
+  --surface: #231a1f;
+  --surface-soft: #2c2026;
+  --accent-soft: #3b222b;
+  --accent-wash: #552b38;
+  --glass: rgb(35 26 31 / 0.85);
+  --field: #2b2026;
+  --border: #4e3842;
+  --line: #3e2c35;
+  --shadow-rgb: 0 0 0;
+  --product-surface: #f3ecee;
+  --hero-flower: #773243;
+}
+
+body,
+.shop-shell {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body,
+.store-header,
+.product-card,
+.glass,
+.store-footer,
+.auth-shell,
+.admin-shell {
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.brand-logo {
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgb(var(--shadow-rgb) / 0.08);
+}
+
+.store-header {
+  background: var(--glass);
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.store-header .brand {
+  min-width: 0;
+}
+
+.theme-toggle {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--primary);
+  border-radius: 50%;
+}
+
+.theme-toggle:hover {
+  background: var(--accent-soft);
+}
+
+.theme-toggle svg {
+  width: 19px;
+  height: 19px;
+  transition: transform 180ms ease;
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(-12deg);
+}
+
+.btn.primary,
+.chat-fab,
+.skip-link {
+  color: var(--on-action);
+  background: var(--action);
+}
+
+.btn.primary:hover:not(:disabled),
+.chat-fab:hover {
+  background: var(--action-hover);
+}
+
+.btn.secondary,
+.dropdown,
+.notification-panel,
+.modal-glass {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.modal-glass::backdrop {
+  background: rgb(18 7 12 / 0.55);
+}
+
+.hero h1 {
+  color: var(--ink);
+}
+
+.hero h1 em,
+.store-nav > a.active,
+.bag-button,
+.auth-story em {
+  color: var(--primary);
+}
+
+.hero-orbit {
+  background: linear-gradient(145deg, var(--accent-wash), var(--surface-soft));
+}
+
+.hero-pedestal {
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent-wash));
+}
+
+.hero-pedestal::after {
+  background: linear-gradient(180deg, var(--surface), var(--accent-soft));
+}
+
+.hero-flower {
+  color: var(--hero-flower);
+}
+
+.floating-label {
+  background: var(--glass);
+  border-color: var(--border);
+}
+
+.category-card {
+  border-color: var(--border);
+}
+
+.category-card.rice,
+.category-card.coffee {
+  background: var(--accent-soft);
+}
+
+.category-card.can,
+.category-card.clean {
+  background: var(--surface-soft);
+}
+
+.product-visual,
+.detail-visual,
+.cart-item > img,
+.table-product > img,
+.low-stock-item img {
+  background: var(--product-surface);
+}
+
+.product-visual .favorite {
+  background: rgb(255 255 255 / 0.88);
+  color: #70545f;
+}
+
+.product-visual .favorite.selected {
+  color: var(--action);
+  background: #ffe9eb;
+}
+
+.add-btn,
+.discount {
+  background: var(--accent-soft);
+  color: var(--primary);
+  border-color: var(--border);
+}
+
+.contact-banner,
+.stat-primary {
+  background: linear-gradient(125deg, var(--action), var(--action-hover));
+  color: var(--on-action);
+}
+
+.contact-banner :is(.eyebrow, h2, p),
+.stat-primary :is(.stat-label, strong, small, .stat-card-top) {
+  color: var(--on-action);
+}
+
+.contact-banner .btn.light {
+  background: #ffffff;
+  color: #b51c2a;
+}
+
+.store-footer {
+  background: var(--surface-soft);
+}
+
+.auth-story {
+  background: linear-gradient(145deg, var(--surface-soft), var(--accent-soft));
+}
+
+.auth-main {
+  position: relative;
+  background: var(--paper);
+}
+
+.auth-theme {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+.admin-shell {
+  background: linear-gradient(115deg, var(--surface-soft), var(--paper) 45%, var(--surface-soft));
+}
+
+.admin-sidebar {
+  background: var(--glass);
+  border-color: var(--border);
+}
+
+.admin-sidebar > .brand {
+  margin-left: 8px;
+  margin-bottom: 20px;
+}
+
+.admin-sidebar .brand-logo {
+  width: 74px;
+  height: 74px;
+}
+
+.admin-sidebar nav > a.active,
+.settings-link.active,
+.segmented .active {
+  color: var(--primary);
+  background: var(--accent-soft);
+  border-color: var(--border);
+}
+
+.admin-search,
+.segmented {
+  background: var(--field);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .status.success {
+  background: #254232;
+  color: #b9e6c8;
+}
+
+:root[data-theme="dark"] .status.warning {
+  background: #49391f;
+  color: #f1d09b;
+}
+
+:root[data-theme="dark"] .status.danger {
+  background: #552b38;
+  color: #ffb1bf;
+}
+
+:root[data-theme="dark"] :is(.product-visual img, .table-product > img, .low-stock-item img) {
+  mix-blend-mode: normal;
+}
+
+:root[data-theme="dark"] .hero-product {
+  mix-blend-mode: normal;
+  background: var(--product-surface);
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0 15px 32px rgb(0 0 0 / 0.2);
+}
+
+:root[data-theme="dark"] .hero-product img {
+  mix-blend-mode: multiply;
+}
+
+@media (max-width: 700px) {
+  .store-header .brand-logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .store-header-actions {
+    gap: 9px;
+  }
+
+  .store-header-actions .theme-toggle {
+    min-width: 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .auth-main {
+    padding-top: 86px;
+  }
+
+  .auth-theme {
+    top: 20px;
+    right: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

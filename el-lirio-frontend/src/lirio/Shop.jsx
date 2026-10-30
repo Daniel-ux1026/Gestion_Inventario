@@ -26,6 +26,7 @@ import {
 import {
   Flower,
   Logo,
+  ThemeToggle,
   Modal,
   Quantity,
   Empty,
@@ -37,9 +38,11 @@ import {
   Status,
 } from "./UI";
 import { useStore } from "./StoreContext";
+import { useTheme } from "./theme";
 import { api, CHAT_URL, money, imageUrl, date } from "./api";
 
 export function ShopLayout() {
+  const { theme } = useTheme();
   const { user, business, cartCount, cartOpen, setCartOpen, demo, logout } =
     useStore();
   const navigate = useNavigate(),
@@ -51,12 +54,6 @@ export function ShopLayout() {
       <a className="skip-link" href="#contenido">
         Ir al contenido
       </a>
-      <div className="store-strip">
-        <span>Pequeños detalles. Una compra mejor.</span>
-        <a href={"tel:+51" + business.telefono.replace(/\D/g, "")}>
-          <FiPhone /> {business.telefono}
-        </a>
-      </div>
       <header className="store-header">
         <Logo />
         <nav aria-label="Navegación principal" className="store-nav">
@@ -84,6 +81,7 @@ export function ShopLayout() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </form>
+          <ThemeToggle />
           <div className="user-menu">
             <button
               className="icon-btn"
@@ -200,7 +198,7 @@ export function ShopLayout() {
           </p>
           <iframe
             title="Asistente de El Lirio en Streamlit"
-            src={CHAT_URL + "/?embed=true"}
+            src={CHAT_URL + "/?embed=true&embed_options=" + theme + "_theme&lirio_theme=" + theme}
           />
           <p className="small muted">
             Si el asistente no carga,{" "}

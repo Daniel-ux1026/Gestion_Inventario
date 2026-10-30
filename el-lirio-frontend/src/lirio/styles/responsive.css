@@ -291,7 +291,7 @@
     position: fixed;
     inset: 0;
     border: 0;
-    background: #28312455;
+    background: color-mix(in srgb, var(--action) 33.3%, transparent);
     backdrop-filter: blur(4px);
     z-index: 44;
   }
@@ -634,7 +634,7 @@
   .trust-bar > div {
     justify-content: flex-start;
     border-right: 0;
-    border-bottom: 1px solid #e2e5d7;
+    border-bottom: 1px solid var(--border);
     padding: 13px 10px;
     gap: 13px;
   }

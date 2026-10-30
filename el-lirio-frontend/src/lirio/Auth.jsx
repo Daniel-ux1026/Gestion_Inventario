@@ -6,7 +6,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { FiArrowRight, FiEye, FiEyeOff, FiLock, FiCheck } from "react-icons/fi";
-import { Logo, Flower, ErrorBox } from "./UI";
+import { Logo, Flower, ErrorBox, ThemeToggle } from "./UI";
 import { useStore } from "./StoreContext";
 import { api } from "./api";
 
@@ -90,6 +90,7 @@ export default function Auth({ mode = "login" }) {
         </Link>
       </div>
       <div className="auth-main">
+        <div className="auth-theme"><ThemeToggle /></div>
         <div className="auth-card">
           <span className="auth-lock">
             <FiLock />

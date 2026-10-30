@@ -19,14 +19,13 @@ import {
   FiArrowUpRight,
   FiSearch,
   FiBell,
-  FiMoon,
-  FiSun,
   FiMenu,
   FiX,
   FiRepeat,
   FiCheckCircle,
 } from "react-icons/fi";
-import { Logo, Flower } from "./UI";
+import { Logo, Flower, ThemeToggle } from "./UI";
+import { useTheme } from "./theme";
 import { useStore } from "./StoreContext";
 import useApi from "./useApi";
 
@@ -92,23 +91,13 @@ export default function AdminLayout() {
   const [search, setSearch] = useState(""),
     [alerts, setAlerts] = useState(false),
     [menu, setMenu] = useState(false);
-  const [dark, setDark] = useState(
-    () => localStorage.getItem("lirio.theme") === "dark",
-  );
-  function toggleTheme() {
-    setDark((v) => !v);
-    try {
-      localStorage.setItem("lirio.theme", dark ? "light" : "dark");
-    } catch {
-      /* Use the theme for this session. */
-    }
-  }
+  const { theme } = useTheme();
   const label =
     navigation.find(
       ([path]) => path && location.pathname.startsWith("/admin/" + path),
     )?.[1] || "Resumen";
   return (
-    <div className="admin-shell" data-theme={dark ? "dark" : "light"}>
+    <div className="admin-shell" data-theme={theme}>
       <a className="skip-link" href="#admin-contenido">
         Ir al contenido
       </a>
@@ -211,13 +200,7 @@ export default function AdminLayout() {
             <kbd>↵</kbd>
           </form>
           <div className="topbar-actions">
-            <button
-              className="icon-btn"
-              aria-label={dark ? "Activar tema claro" : "Activar tema oscuro"}
-              onClick={toggleTheme}
-            >
-              {dark ? <FiSun /> : <FiMoon />}
-            </button>
+            <ThemeToggle />
             <div className="notification-anchor">
               <button
                 className="icon-btn"

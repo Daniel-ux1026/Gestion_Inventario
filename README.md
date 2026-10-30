@@ -1,13 +1,21 @@
-<p align="center"><img src="el-lirio-frontend/public/lirio.svg" width="68" alt="El Lirio"></p>
+<p align="center"><img src="el-lirio-frontend/public/lirio-logo.jpg" width="68" alt="El Lirio"></p>
 <h1 align="center">El Lirio · Abarrotes & hogar</h1>
 <p align="center">Una compra sencilla. Un inventario en orden.</p>
 <p align="center"><b>React 19 · Vite 7 · Java 21 · Spring Boot · MySQL · Streamlit</b></p>
 
 ![Tienda El Lirio](docs/images/tienda.png)
 
-Sistema de ventas e inventario para **El Lirio de los Valles**, con tienda para clientes y administración conectada al servidor. Diseño inspirado en iOS: vidrio translúcido, tonos cálidos, verde salvia, transiciones suaves y distribución adaptable a celular. Las animaciones respetan la preferencia de movimiento reducido.
+Sistema de ventas e inventario para **El Lirio de los Valles**, con tienda para clientes y administración conectada al servidor. Diseño inspirado en iOS: vidrio translúcido, la identidad roja y blanca de Lirio Inversiones, modo oscuro, transiciones suaves y distribución adaptable a celular. Las animaciones respetan la preferencia de movimiento reducido.
 
 **Rama de entrega: version-final-lirio**, basada en inventario-backendv2. Las cuatro ramas se revisaron y se conservaron. [Revisión de ramas](docs/REVISION_RAMAS.md).
+
+## Identidad y modos de color
+
+El logo original de **Lirio Inversiones** identifica la tienda. La paleta roja y blanca se aplica también a la administración y al asistente. El botón de luna o sol permite cambiar de modo en tienda, acceso y administración; la elección se conserva al navegar y recargar. La franja superior anterior se retiró.
+
+![Tienda en modo oscuro](docs/images/tienda-oscuro.png)
+
+[Diseño, accesibilidad y verificación](docs/DISENO_MARCA.md).
 
 ## La experiencia
 
@@ -22,7 +30,7 @@ Sistema de ventas e inventario para **El Lirio de los Valles**, con tienda para 
 
 ### Tu negocio, de un vistazo
 
-![Panel de administración](docs/images/dashboard.png)
+![Panel de administración](docs/images/admin-rojo.png)
 
 ### Cada producto en su lugar
 
